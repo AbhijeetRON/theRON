@@ -3,906 +3,748 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>THE RON — Security Research & Cyber Education</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<title>THE RON</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --black: #090909;
-    --white: #f5f4f0;
-    --gray: #888;
-    --border: #1e1e1e;
-    --accent: #00e5a0;
-    --danger: #ff3b3b;
-    --mono: 'JetBrains Mono', monospace;
-    --sans: 'Inter', sans-serif;
-  }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: var(--sans);
-    background: var(--black);
-    color: var(--white);
-    font-size: 15px;
-    line-height: 1.6;
-    overflow-x: hidden;
-  }
-
-  a { color: inherit; text-decoration: none; }
-
-  /* ── TOPBAR ── */
-  .topbar {
-    background: var(--accent);
-    color: var(--black);
-    text-align: center;
-    padding: 8px 24px;
-    font-family: var(--mono);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1px;
-  }
-  .topbar a { color: var(--black); text-decoration: underline; }
-
-  /* ── NAV ── */
-  nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(9,9,9,0.95);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 56px;
-  }
-
-  .logo {
-    font-family: var(--mono);
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 2px;
-  }
-  .logo span { color: var(--accent); }
-
-  .nav-links {
-    display: flex;
-    gap: 32px;
-    list-style: none;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 1px;
-  }
-  .nav-links a {
-    color: var(--gray);
-    transition: color 0.15s;
-  }
-  .nav-links a:hover { color: var(--white); }
-
-  .nav-cta {
-    background: var(--accent);
-    color: var(--black);
-    font-size: 11px;
-    font-weight: 700;
-    font-family: var(--mono);
-    padding: 8px 16px;
-    letter-spacing: 1px;
-  }
-  .nav-cta:hover { opacity: 0.85; }
-
-  /* ── HERO ── */
-  .hero {
-    padding: 100px 32px 80px;
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-  .hero-tag {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--accent);
-    letter-spacing: 2px;
-    margin-bottom: 24px;
-  }
-
-  .hero h1 {
-    font-size: clamp(2.4rem, 6vw, 4.5rem);
-    font-weight: 900;
-    line-height: 1.02;
-    letter-spacing: -2px;
-    margin-bottom: 24px;
-  }
-
-  .hero h1 em {
-    font-style: normal;
-    color: var(--accent);
-  }
-
-  .hero-sub {
-    font-size: 16px;
-    color: var(--gray);
-    max-width: 540px;
-    line-height: 1.7;
-    margin-bottom: 40px;
-  }
-
-  .hero-btns {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  .btn-primary {
-    background: var(--accent);
-    color: var(--black);
-    font-family: var(--mono);
-    font-size: 12px;
-    font-weight: 700;
-    padding: 13px 28px;
-    letter-spacing: 1px;
-    transition: opacity 0.15s;
-  }
-  .btn-primary:hover { opacity: 0.85; }
-
-  .btn-outline {
-    background: transparent;
-    color: var(--white);
-    font-family: var(--mono);
-    font-size: 12px;
-    font-weight: 700;
-    padding: 12px 28px;
-    border: 1px solid var(--border);
-    letter-spacing: 1px;
-    transition: border-color 0.15s;
-  }
-  .btn-outline:hover { border-color: #555; }
-
-  /* ── STATS BAR ── */
-  .stats-bar {
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: 24px 32px;
-    display: flex;
-    gap: 0;
-    overflow-x: auto;
-  }
-
-  .stat {
-    flex: 1;
-    min-width: 140px;
-    padding: 0 32px;
-    border-right: 1px solid var(--border);
-  }
-  .stat:first-child { padding-left: 0; }
-  .stat:last-child { border-right: none; }
-
-  .stat-num {
-    font-family: var(--mono);
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--accent);
-    display: block;
-  }
-
-  .stat-label {
-    font-size: 11px;
-    color: var(--gray);
-    letter-spacing: 1px;
-    margin-top: 2px;
-  }
-
-  /* ── SECTION WRAPPER ── */
-  .section {
-    padding: 80px 32px;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-
-  .section-label {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--accent);
-    letter-spacing: 2px;
-    margin-bottom: 8px;
-  }
-
-  .section-title {
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 40px;
-    letter-spacing: -0.5px;
-  }
-
-  .divider {
-    border: none;
-    border-top: 1px solid var(--border);
-  }
-
-  /* ── COURSES ── */
-  .courses-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-  }
-
-  .course-card {
-    background: var(--black);
-    padding: 28px 24px;
-    transition: background 0.15s;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .course-card:hover { background: #111; }
-
-  .course-badge {
-    font-family: var(--mono);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    padding: 4px 8px;
-    display: inline-block;
-    width: fit-content;
-  }
-  .badge-new { background: var(--accent); color: var(--black); }
-  .badge-live { background: var(--danger); color: #fff; }
-  .badge-free { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
-
-  .course-title {
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 1.3;
-    flex: 1;
-  }
-
-  .course-meta {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--gray);
-  }
-
-  .course-price {
-    font-family: var(--mono);
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--accent);
-  }
-  .course-price .original {
-    font-size: 13px;
-    color: var(--gray);
-    text-decoration: line-through;
-    margin-left: 6px;
-  }
-
-  .course-enroll {
-    display: inline-block;
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--white);
-    font-family: var(--mono);
-    font-size: 11px;
-    font-weight: 700;
-    padding: 9px 18px;
-    letter-spacing: 1px;
-    transition: all 0.15s;
-    cursor: pointer;
-    width: 100%;
-    text-align: center;
-  }
-  .course-enroll:hover {
-    background: var(--accent);
-    color: var(--black);
-    border-color: var(--accent);
-  }
-
-  /* ── LIVE CLASS ── */
-  .live-banner {
-    background: #0a0a0a;
-    border: 1px solid var(--border);
-    padding: 36px 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 32px;
-    flex-wrap: wrap;
-  }
-
-  .live-indicator {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--danger);
-    letter-spacing: 1px;
-    margin-bottom: 10px;
-  }
-
-  .live-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--danger);
-    animation: pulse 1.5s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-
-  .live-title {
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-
-  .live-desc {
-    font-size: 14px;
-    color: var(--gray);
-  }
-
-  .live-join {
-    background: var(--danger);
-    color: #fff;
-    font-family: var(--mono);
-    font-size: 12px;
-    font-weight: 700;
-    padding: 14px 32px;
-    letter-spacing: 1px;
-    white-space: nowrap;
-    transition: opacity 0.15s;
-    cursor: pointer;
-    border: none;
-  }
-  .live-join:hover { opacity: 0.85; }
-
-  /* ── BLOG ── */
-  .blog-list {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .blog-row {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 24px;
-    padding: 22px 0;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    transition: all 0.1s;
-  }
-  .blog-row:first-child { border-top: 1px solid var(--border); }
-  .blog-row:hover .blog-title { color: var(--accent); }
-
-  .blog-left { display: flex; align-items: baseline; gap: 16px; flex: 1; }
-
-  .blog-cat {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--accent);
-    letter-spacing: 1.5px;
-    white-space: nowrap;
-    min-width: 80px;
-  }
-
-  .blog-title {
-    font-size: 15px;
-    font-weight: 500;
-    transition: color 0.15s;
-    line-height: 1.4;
-  }
-
-  .blog-date {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--gray);
-    white-space: nowrap;
-  }
-
-  /* ── CYBER AWARENESS ── */
-  .awareness-section {
-    background: #050505;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: 80px 32px;
-  }
-
-  .awareness-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-
-  .awareness-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    margin-top: 40px;
-  }
-
-  .awareness-card {
-    background: #050505;
-    padding: 28px 24px;
-  }
-
-  .awareness-icon {
-    font-family: var(--mono);
-    font-size: 22px;
-    margin-bottom: 14px;
-    display: block;
-    color: var(--accent);
-  }
-
-  .awareness-title {
-    font-size: 15px;
-    font-weight: 600;
-    margin-bottom: 8px;
-  }
-
-  .awareness-desc {
-    font-size: 13px;
-    color: var(--gray);
-    line-height: 1.6;
-  }
-
-  /* ── FOCUS AREAS ── */
-  .focus-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-  }
-
-  .focus-card {
-    background: var(--black);
-    padding: 32px 28px;
-  }
-
-  .focus-num {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--gray);
-    margin-bottom: 16px;
-  }
-
-  .focus-title {
-    font-size: 17px;
-    font-weight: 700;
-    margin-bottom: 10px;
-  }
-
-  .focus-desc {
-    font-size: 13px;
-    color: var(--gray);
-    line-height: 1.65;
-  }
-
-  /* ── ABOUT ── */
-  .about-wrap {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: start;
-  }
-
-  .about-left h2 {
-    font-size: 36px;
-    font-weight: 900;
-    letter-spacing: -1px;
-    line-height: 1.1;
-    margin-bottom: 24px;
-  }
-
-  .about-left p {
-    font-size: 14px;
-    color: var(--gray);
-    line-height: 1.75;
-    margin-bottom: 16px;
-  }
-
-  .about-links {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-  }
-
-  .about-link-row {
-    background: var(--black);
-    padding: 16px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: var(--mono);
-    font-size: 12px;
-    transition: background 0.1s;
-    cursor: pointer;
-  }
-  .about-link-row:hover { background: #111; }
-  .about-link-row span:last-child { color: var(--accent); }
-
-  /* ── FOOTER ── */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 32px 32px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 16px;
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--gray);
-    letter-spacing: 1px;
-  }
-
-  .footer-links {
-    display: flex;
-    gap: 24px;
-  }
-  .footer-links a:hover { color: var(--white); }
-
-  /* ── MOBILE ── */
-  @media (max-width: 768px) {
-    nav { padding: 0 16px; }
-    .nav-links { display: none; }
-    .hero { padding: 64px 20px 56px; }
-    .hero h1 { letter-spacing: -1px; }
-    .section { padding: 56px 20px; }
-    .stats-bar { padding: 20px; gap: 0; }
-    .stat { min-width: 110px; padding: 0 16px; }
-    .live-banner { padding: 28px 24px; }
-    .focus-grid { grid-template-columns: 1fr; }
-    .about-wrap { grid-template-columns: 1fr; gap: 40px; }
-    footer { padding: 24px 20px; flex-direction: column; align-items: flex-start; }
-  }
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0c0c0c;
+  --fg:#e8e6df;
+  --dim:#5a5a5a;
+  --green:#b8ff57;
+  --red:#ff4040;
+  --line:#1c1c1c;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family:'Space Grotesk',sans-serif;
+  font-size:16px;
+  line-height:1.5;
+  cursor:crosshair;
+}
+a{color:inherit;text-decoration:none}
+mono{font-family:'Space Mono',monospace;font-size:0.85em}
+
+/* NAV */
+.nav{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 40px;
+  border-bottom:1px solid var(--line);
+  position:sticky;top:0;
+  background:rgba(12,12,12,0.97);
+  z-index:99;
+}
+.nav-logo{
+  font-family:'Space Mono',monospace;
+  font-size:13px;
+  letter-spacing:3px;
+}
+.nav-logo b{color:var(--green)}
+.nav-r{display:flex;gap:32px;align-items:center}
+.nav-r a{
+  font-size:12px;
+  letter-spacing:1px;
+  color:var(--dim);
+  transition:color 0.1s;
+}
+.nav-r a:hover{color:var(--fg)}
+.nav-live{
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  color:var(--red);
+  border:1px solid var(--red);
+  padding:6px 14px;
+  letter-spacing:1px;
+  animation:blink 2s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.5}}
+
+/* HERO */
+.hero{
+  padding:80px 40px 60px;
+  border-bottom:1px solid var(--line);
+  display:grid;
+  grid-template-columns:1fr 320px;
+  gap:60px;
+  align-items:end;
+}
+.hero-left{}
+.hero-eyebrow{
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  color:var(--green);
+  letter-spacing:2px;
+  margin-bottom:28px;
+}
+.hero-name{
+  font-size:clamp(3rem,8vw,6rem);
+  font-weight:700;
+  line-height:0.95;
+  letter-spacing:-3px;
+  margin-bottom:32px;
+}
+.hero-name span{
+  display:block;
+  color:var(--dim);
+  font-weight:300;
+}
+.hero-bio{
+  font-size:15px;
+  color:var(--dim);
+  max-width:480px;
+  line-height:1.8;
+  border-left:2px solid var(--green);
+  padding-left:20px;
+}
+.hero-right{
+  border:1px solid var(--line);
+  padding:24px;
+  align-self:start;
+  margin-top:20px;
+}
+.hero-right-label{
+  font-family:'Space Mono',monospace;
+  font-size:10px;
+  color:var(--dim);
+  letter-spacing:2px;
+  margin-bottom:16px;
+}
+.hero-stat{
+  padding:12px 0;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+}
+.hero-stat:last-child{border-bottom:none}
+.stat-k{font-size:12px;color:var(--dim)}
+.stat-v{
+  font-family:'Space Mono',monospace;
+  font-size:13px;
+  color:var(--green);
+}
+
+/* TICKER */
+.ticker{
+  border-bottom:1px solid var(--line);
+  padding:12px 40px;
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  color:var(--dim);
+  overflow:hidden;
+  white-space:nowrap;
+}
+.ticker-inner{
+  display:inline-block;
+  animation:tick 30s linear infinite;
+}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* SECTION BASE */
+.sec{
+  border-bottom:1px solid var(--line);
+}
+.sec-head{
+  display:flex;
+  align-items:baseline;
+  gap:16px;
+  padding:28px 40px 0;
+  margin-bottom:32px;
+}
+.sec-num{
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  color:var(--dim);
+}
+.sec-title{
+  font-size:13px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--dim);
+}
+.sec-body{padding:0 40px 48px}
+
+/* COURSES — list style, not cards */
+.course-row{
+  display:grid;
+  grid-template-columns:40px 1fr auto auto;
+  gap:24px;
+  align-items:baseline;
+  padding:20px 0;
+  border-bottom:1px solid var(--line);
+  transition:background 0.1s;
+}
+.course-row:last-child{border-bottom:none}
+.course-row:hover{background:rgba(255,255,255,0.02);margin:0 -40px;padding:20px 40px}
+.c-num{
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  color:var(--dim);
+}
+.c-info{}
+.c-name{font-size:16px;font-weight:500;margin-bottom:4px}
+.c-meta{font-size:12px;color:var(--dim)}
+.c-tag{
+  font-family:'Space Mono',monospace;
+  font-size:10px;
+  padding:3px 10px;
+  letter-spacing:1px;
+}
+.tag-free{color:var(--green);border:1px solid var(--green)}
+.tag-live{color:var(--red);border:1px solid var(--red)}
+.tag-new{color:var(--fg);border:1px solid var(--line)}
+.c-price{
+  font-family:'Space Mono',monospace;
+  font-size:15px;
+  color:var(--green);
+  white-space:nowrap;
+}
+.c-price s{color:var(--dim);font-size:11px;margin-left:4px}
+.enroll-btn{
+  display:inline-block;
+  margin-top:6px;
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  color:var(--bg);
+  background:var(--green);
+  padding:8px 16px;
+  letter-spacing:1px;
+  cursor:pointer;
+  transition:opacity 0.1s;
+  text-align:center;
+}
+.enroll-btn:hover{opacity:0.85}
+.enroll-btn.outline{
+  background:transparent;
+  color:var(--fg);
+  border:1px solid var(--line);
+}
+.enroll-btn.outline:hover{border-color:var(--fg)}
+
+/* LIVE */
+.live-wrap{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:40px;
+  align-items:center;
+  padding:32px;
+  border:1px solid var(--red);
+  margin-bottom:24px;
+}
+.live-dot-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  color:var(--red);
+  letter-spacing:1px;
+  margin-bottom:12px;
+}
+.ldot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--red);
+  animation:blink 1.2s infinite;
+}
+.live-title{font-size:20px;font-weight:600;margin-bottom:6px}
+.live-sub{font-size:13px;color:var(--dim)}
+.upcoming-list{}
+.up-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 0;
+  border-bottom:1px solid var(--line);
+  font-size:13px;
+}
+.up-row:last-child{border-bottom:none}
+.up-date{
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  color:var(--dim);
+  min-width:100px;
+}
+.up-price{
+  font-family:'Space Mono',monospace;
+  font-size:12px;
+  color:var(--green);
+}
+
+/* BLOG */
+.blog-row{
+  display:grid;
+  grid-template-columns:120px 1fr 90px;
+  gap:24px;
+  align-items:baseline;
+  padding:18px 0;
+  border-bottom:1px solid var(--line);
+  cursor:pointer;
+  transition:all 0.1s;
+}
+.blog-row:last-child{border-bottom:none}
+.blog-row:hover .blog-t{color:var(--green)}
+.blog-cat{
+  font-family:'Space Mono',monospace;
+  font-size:10px;
+  color:var(--dim);
+  letter-spacing:1px;
+}
+.blog-t{font-size:15px;font-weight:400;transition:color 0.1s}
+.blog-d{
+  font-family:'Space Mono',monospace;
+  font-size:10px;
+  color:var(--dim);
+  text-align:right;
+}
+.view-all{
+  display:inline-block;
+  margin-top:24px;
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  color:var(--dim);
+  letter-spacing:1px;
+  border-bottom:1px solid var(--dim);
+  padding-bottom:2px;
+  transition:color 0.1s;
+}
+.view-all:hover{color:var(--green);border-color:var(--green)}
+
+/* CYBER AWARENESS */
+.aware-intro{
+  font-size:18px;
+  font-weight:300;
+  color:var(--dim);
+  max-width:600px;
+  line-height:1.7;
+  margin-bottom:40px;
+  border-left:2px solid var(--red);
+  padding-left:20px;
+}
+.aware-row{
+  display:grid;
+  grid-template-columns:36px 1fr;
+  gap:20px;
+  padding:20px 0;
+  border-bottom:1px solid var(--line);
+  align-items:start;
+}
+.aware-row:last-child{border-bottom:none}
+.aware-n{
+  font-family:'Space Mono',monospace;
+  font-size:13px;
+  color:var(--green);
+  font-weight:700;
+}
+.aware-title{font-size:15px;font-weight:500;margin-bottom:4px}
+.aware-desc{font-size:13px;color:var(--dim);line-height:1.65}
+
+/* ABOUT / CREATOR */
+.about-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:60px;
+}
+.about-bio-name{
+  font-size:40px;
+  font-weight:700;
+  letter-spacing:-2px;
+  line-height:1;
+  margin-bottom:24px;
+}
+.about-bio-name span{
+  display:block;
+  color:var(--dim);
+  font-weight:300;
+  font-size:20px;
+  letter-spacing:0;
+  margin-bottom:4px;
+}
+.about-p{font-size:14px;color:var(--dim);line-height:1.8;margin-bottom:14px}
+.connect-list{}
+.connect-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 0;
+  border-bottom:1px solid var(--line);
+  font-size:13px;
+}
+.connect-row:first-child{border-top:1px solid var(--line)}
+.connect-platform{color:var(--dim);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1px}
+.connect-handle{color:var(--green);font-family:'Space Mono',monospace;font-size:12px}
+
+/* FOOTER */
+.footer{
+  padding:24px 40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:12px;
+}
+.footer-left{
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  color:var(--dim);
+}
+.footer-right{
+  display:flex;gap:24px;
+}
+.footer-right a{
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  color:var(--dim);
+  letter-spacing:1px;
+  transition:color 0.1s;
+}
+.footer-right a:hover{color:var(--green)}
+
+@media(max-width:768px){
+  .nav{padding:16px 20px}
+  .nav-r a:not(.nav-live){display:none}
+  .hero{grid-template-columns:1fr;padding:48px 20px 40px;gap:32px}
+  .hero-right{display:none}
+  .sec-head,.sec-body,.ticker{padding-left:20px;padding-right:20px}
+  .course-row{grid-template-columns:30px 1fr;gap:12px}
+  .c-tag,.c-price{display:none}
+  .blog-row{grid-template-columns:80px 1fr;gap:12px}
+  .blog-d{display:none}
+  .about-grid{grid-template-columns:1fr;gap:32px}
+  .live-wrap{grid-template-columns:1fr;gap:16px}
+  .footer{padding:20px}
+}
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
-<div class="topbar">
-  New batch open: Web Hacking 101 — ₹499 only &nbsp;·&nbsp; <a href="#courses">See all courses →</a>
-</div>
-
 <!-- NAV -->
-<nav>
-  <div class="logo">THE<span> RON</span></div>
-  <ul class="nav-links">
-    <li><a href="#courses">Courses</a></li>
-    <li><a href="#live">Live</a></li>
-    <li><a href="#blog">Blog</a></li>
-    <li><a href="#awareness">Cyber Safety</a></li>
-    <li><a href="#about">About</a></li>
-  </ul>
-  <a href="#courses" class="nav-cta">Enroll Now</a>
+<nav class="nav">
+  <div class="nav-logo">THE<b>RON</b></div>
+  <div class="nav-r">
+    <a href="#courses">Courses</a>
+    <a href="#live">Live</a>
+    <a href="https://itstudent13.wordpress.com/" target="_blank">Blog</a>
+    <a href="#awareness">Cyber Safety</a>
+    <a href="#about">About</a>
+    <a class="nav-live" href="#live">● LIVE CLASS</a>
+  </div>
 </nav>
+
+<!-- TICKER -->
+<div class="ticker">
+  <span class="ticker-inner">
+    WEB HACKING 101 — ₹499 &nbsp;·&nbsp; BUG BOUNTY BATCH OPEN &nbsp;·&nbsp; LINUX FOR HACKERS — FREE &nbsp;·&nbsp; CYBERBACHAO — FREE GUIDES &nbsp;·&nbsp; SOC L1 ROADMAP — ₹899 &nbsp;·&nbsp; LIVE CLASS SUN 7PM IST — ₹99 &nbsp;·&nbsp; WEB HACKING 101 — ₹499 &nbsp;·&nbsp; BUG BOUNTY BATCH OPEN &nbsp;·&nbsp; LINUX FOR HACKERS — FREE &nbsp;·&nbsp; CYBERBACHAO — FREE GUIDES &nbsp;·&nbsp; SOC L1 ROADMAP — ₹899 &nbsp;·&nbsp; LIVE CLASS SUN 7PM IST — ₹99 &nbsp;·&nbsp;
+  </span>
+</div>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-tag">// Security Research · Cyber Education · AI Labs</div>
-  <h1>Breaking systems<br>to build <em>better</em><br>security.</h1>
-  <p class="hero-sub">
-    Courses, live classes, and honest cyber content — web audits, Linux telemetry, bug bounty, and AI labs. At prices that don't gatekeep knowledge.
-  </p>
-  <div class="hero-btns">
-    <a href="#courses" class="btn-primary">Browse Courses →</a>
-    <a href="#live" class="btn-outline">Join Free Live Class</a>
+  <div class="hero-left">
+    <div class="hero-eyebrow">// Security · Education · Systems · 2026</div>
+    <div class="hero-name">
+      Breaking<br>
+      <span>systems to build</span>
+      better security.
+    </div>
+    <p class="hero-bio">
+      Web audits · Bug bounty · Linux telemetry · AI labs · Honest cyber courses in Hindi &amp; English. Knowledge jo sab ke liye ho — sirf unke liye nahi jinke paas paisa hai.
+    </p>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-label">// QUICK STATS</div>
+    <div class="hero-stat">
+      <span class="stat-k">Courses available</span>
+      <span class="stat-v">06</span>
+    </div>
+    <div class="hero-stat">
+      <span class="stat-k">Cheapest course</span>
+      <span class="stat-v">FREE</span>
+    </div>
+    <div class="hero-stat">
+      <span class="stat-k">Live class price</span>
+      <span class="stat-v">₹99</span>
+    </div>
+    <div class="hero-stat">
+      <span class="stat-k">Language</span>
+      <span class="stat-v">HI + EN</span>
+    </div>
+    <div class="hero-stat">
+      <span class="stat-k">HackerOne handle</span>
+      <span class="stat-v">ban360</span>
+    </div>
   </div>
 </section>
-
-<!-- STATS -->
-<div class="stats-bar">
-  <div class="stat">
-    <span class="stat-num">12+</span>
-    <div class="stat-label">Courses & Labs</div>
-  </div>
-  <div class="stat">
-    <span class="stat-num">₹99</span>
-    <div class="stat-label">Live class price</div>
-  </div>
-  <div class="stat">
-    <span class="stat-num">Free</span>
-    <div class="stat-label">Blog & guides</div>
-  </div>
-  <div class="stat">
-    <span class="stat-num">Hindi + English</span>
-    <div class="stat-label">Language support</div>
-  </div>
-</div>
 
 <!-- COURSES -->
-<section class="section" id="courses">
-  <div class="section-label">// Courses</div>
-  <div class="section-title">Learn real security — cheap price, real knowledge.</div>
-  <div class="courses-grid">
-
-    <div class="course-card">
-      <span class="course-badge badge-new">Web Security</span>
-      <div class="course-title">Web Hacking 101 — OWASP Top 10</div>
-      <div class="course-meta">6 hours · Hindi + English · Beginner</div>
-      <div class="course-price">₹499 <span class="original">₹2,999</span></div>
-      <button class="course-enroll">Enroll Now →</button>
-    </div>
-
-    <div class="course-card">
-      <span class="course-badge badge-live">Live Batch</span>
-      <div class="course-title">Bug Bounty — Zero to First Report</div>
-      <div class="course-meta">8 sessions · Live on Meet · All levels</div>
-      <div class="course-price">₹999 <span class="original">₹4,999</span></div>
-      <button class="course-enroll">Join Batch →</button>
-    </div>
-
-    <div class="course-card">
-      <span class="course-badge badge-free">Free</span>
-      <div class="course-title">Linux for Hackers — Complete Basics</div>
-      <div class="course-meta">3 hours · Hindi · Beginner</div>
-      <div class="course-price">₹0</div>
-      <button class="course-enroll">Start Free →</button>
-    </div>
-
-    <div class="course-card">
-      <span class="course-badge badge-new">Burp Suite</span>
-      <div class="course-title">Burp Suite Pro — Practical Hacking</div>
-      <div class="course-meta">4 hours · Hindi + English · Intermediate</div>
-      <div class="course-price">₹699 <span class="original">₹3,499</span></div>
-      <button class="course-enroll">Enroll Now →</button>
-    </div>
-
-    <div class="course-card">
-      <span class="course-badge badge-new">AI + Security</span>
-      <div class="course-title">Local LLMs for Hackers — Ollama & More</div>
-      <div class="course-meta">4 hours · Hindi + English · Intermediate</div>
-      <div class="course-price">₹599 <span class="original">₹2,499</span></div>
-      <button class="course-enroll">Enroll Now →</button>
-    </div>
-
-    <div class="course-card">
-      <span class="course-badge badge-new">SOC / Blue Team</span>
-      <div class="course-title">SOC L1 Analyst — Job Ready Roadmap</div>
-      <div class="course-meta">8 hours · Hindi · Beginner to Job</div>
-      <div class="course-price">₹899 <span class="original">₹4,999</span></div>
-      <button class="course-enroll">Enroll Now →</button>
-    </div>
-
+<section class="sec" id="courses">
+  <div class="sec-head">
+    <span class="sec-num">01</span>
+    <span class="sec-title">Courses</span>
   </div>
-</section>
-
-<hr class="divider">
-
-<!-- LIVE CLASS -->
-<section class="section" id="live">
-  <div class="section-label">// Live Classes</div>
-  <div class="section-title">Hands-on, real-time. Join from anywhere.</div>
-  <div class="live-banner">
-    <div>
-      <div class="live-indicator">
-        <div class="live-dot"></div>
-        LIVE · Sun 21 Sep · 7:00 PM IST
+  <div class="sec-body">
+    <div class="course-row">
+      <div class="c-num">01</div>
+      <div class="c-info">
+        <div class="c-name">Web Hacking 101 — OWASP Top 10</div>
+        <div class="c-meta">6 hrs · Hindi + English · Beginner</div>
+        <a href="https://itstudent13.wordpress.com/" target="_blank" class="enroll-btn" style="margin-top:10px;display:inline-block">Enroll →</a>
       </div>
-      <div class="live-title">Burp Suite — Real Bug Hunting Session</div>
-      <div class="live-desc">Intercept, modify, exploit — hands-on with real targets. Hindi + English. Seats limited.</div>
+      <div class="c-tag tag-new">NEW</div>
+      <div class="c-price">₹499 <s>₹2,999</s></div>
     </div>
-    <button class="live-join">Join for ₹99 →</button>
-  </div>
-
-  <div style="margin-top: 1px; background: var(--border);">
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1px; background: var(--border);">
-      <div style="background: #080808; padding: 22px 24px;">
-        <div style="font-family: var(--mono); font-size: 11px; color: var(--gray); margin-bottom: 8px;">UPCOMING — Sep 28</div>
-        <div style="font-size: 15px; font-weight: 600; margin-bottom: 4px;">OWASP Top 10 — Live Breakdown</div>
-        <div style="font-size: 12px; color: var(--gray);">₹99 · 2 hours</div>
+    <div class="course-row">
+      <div class="c-num">02</div>
+      <div class="c-info">
+        <div class="c-name">Bug Bounty — Zero to First Report</div>
+        <div class="c-meta">8 sessions · Live on Meet · All levels</div>
+        <a href="https://itstudent13.wordpress.com/" target="_blank" class="enroll-btn" style="margin-top:10px;display:inline-block">Join Batch →</a>
       </div>
-      <div style="background: #080808; padding: 22px 24px;">
-        <div style="font-family: var(--mono); font-size: 11px; color: var(--gray); margin-bottom: 8px;">UPCOMING — Oct 5</div>
-        <div style="font-size: 15px; font-weight: 600; margin-bottom: 4px;">Linux Privilege Escalation — Hands-on</div>
-        <div style="font-size: 12px; color: var(--gray);">₹149 · 3 hours</div>
+      <div class="c-tag tag-live">LIVE</div>
+      <div class="c-price">₹999 <s>₹4,999</s></div>
+    </div>
+    <div class="course-row">
+      <div class="c-num">03</div>
+      <div class="c-info">
+        <div class="c-name">Linux for Hackers — Complete Basics</div>
+        <div class="c-meta">3 hrs · Hindi · Beginner · No cost</div>
+        <a href="https://itstudent13.wordpress.com/" target="_blank" class="enroll-btn" style="margin-top:10px;display:inline-block">Start Free →</a>
       </div>
-      <div style="background: #080808; padding: 22px 24px;">
-        <div style="font-family: var(--mono); font-size: 11px; color: var(--gray); margin-bottom: 8px;">UPCOMING — Oct 12</div>
-        <div style="font-size: 15px; font-weight: 600; margin-bottom: 4px;">Recon & Subdomain Enumeration</div>
-        <div style="font-size: 12px; color: var(--gray);">Free for students · 1.5 hours</div>
+      <div class="c-tag tag-free">FREE</div>
+      <div class="c-price">₹0</div>
+    </div>
+    <div class="course-row">
+      <div class="c-num">04</div>
+      <div class="c-info">
+        <div class="c-name">Burp Suite Pro — Practical Hacking</div>
+        <div class="c-meta">4 hrs · Hindi + English · Intermediate</div>
+        <a href="https://itstudent13.wordpress.com/" target="_blank" class="enroll-btn" style="margin-top:10px;display:inline-block">Enroll →</a>
       </div>
+      <div class="c-tag tag-new">NEW</div>
+      <div class="c-price">₹699 <s>₹3,499</s></div>
+    </div>
+    <div class="course-row">
+      <div class="c-num">05</div>
+      <div class="c-info">
+        <div class="c-name">Local LLMs for Hackers — Ollama & More</div>
+        <div class="c-meta">4 hrs · Hindi + English · Intermediate</div>
+        <a href="https://itstudent13.wordpress.com/" target="_blank" class="enroll-btn" style="margin-top:10px;display:inline-block">Enroll →</a>
+      </div>
+      <div class="c-tag tag-new">AI</div>
+      <div class="c-price">₹599 <s>₹2,499</s></div>
+    </div>
+    <div class="course-row">
+      <div class="c-num">06</div>
+      <div class="c-info">
+        <div class="c-name">SOC L1 Analyst — Job Ready Roadmap</div>
+        <div class="c-meta">8 hrs · Hindi · Beginner to Job</div>
+        <a href="https://itstudent13.wordpress.com/" target="_blank" class="enroll-btn" style="margin-top:10px;display:inline-block">Enroll →</a>
+      </div>
+      <div class="c-tag tag-new">SOC</div>
+      <div class="c-price">₹899 <s>₹4,999</s></div>
     </div>
   </div>
 </section>
 
-<hr class="divider">
+<!-- LIVE -->
+<section class="sec" id="live">
+  <div class="sec-head">
+    <span class="sec-num">02</span>
+    <span class="sec-title">Live Classes</span>
+  </div>
+  <div class="sec-body">
+    <div class="live-wrap">
+      <div>
+        <div class="live-dot-row"><div class="ldot"></div> LIVE NOW · SUN 21 SEP · 7:00 PM IST</div>
+        <div class="live-title">Burp Suite — Real Bug Hunting Session</div>
+        <div class="live-sub">Intercept, modify, exploit — hands-on with real targets. Hindi + English. Seats limited.</div>
+      </div>
+      <a href="https://itstudent13.wordpress.com/" target="_blank" class="enroll-btn">Join ₹99 →</a>
+    </div>
+    <div class="upcoming-list">
+      <div class="up-row">
+        <span class="up-date">SEP 28</span>
+        <span>OWASP Top 10 — Live Breakdown</span>
+        <span class="up-price">₹99</span>
+      </div>
+      <div class="up-row">
+        <span class="up-date">OCT 05</span>
+        <span>Linux Privilege Escalation — Hands-on</span>
+        <span class="up-price">₹149</span>
+      </div>
+      <div class="up-row">
+        <span class="up-date">OCT 12</span>
+        <span>Recon & Subdomain Enumeration</span>
+        <span class="up-price" style="color:var(--green)">FREE</span>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- BLOG -->
-<section class="section" id="blog">
-  <div class="section-label">// Blog & Research</div>
-  <div class="section-title">Unfiltered notes from the terminal.</div>
-  <div class="blog-list">
-    <div class="blog-row">
-      <div class="blog-left">
-        <span class="blog-cat">BUG BOUNTY</span>
-        <span class="blog-title">How I found my first bug on HackerOne — full walkthrough</span>
-      </div>
-      <span class="blog-date">Sep 10, 2026</span>
-    </div>
-    <div class="blog-row">
-      <div class="blog-left">
-        <span class="blog-cat">OWASP</span>
-        <span class="blog-title">OWASP Top 10 explained in Hindi — simple aur seedha</span>
-      </div>
-      <span class="blog-date">Sep 5, 2026</span>
-    </div>
-    <div class="blog-row">
-      <div class="blog-left">
-        <span class="blog-cat">AI + LINUX</span>
-        <span class="blog-title">Running Ollama on cheap hardware — complete guide</span>
-      </div>
-      <span class="blog-date">Aug 28, 2026</span>
-    </div>
-    <div class="blog-row">
-      <div class="blog-left">
-        <span class="blog-cat">WEB SECURITY</span>
-        <span class="blog-title">Web Cache Deception — what it is and how to find it</span>
-      </div>
-      <span class="blog-date">Aug 20, 2026</span>
-    </div>
-    <div class="blog-row">
-      <div class="blog-left">
-        <span class="blog-cat">PHILOSOPHY</span>
-        <span class="blog-title">The psychology of a hacker — curiosity, power, and ethics</span>
-      </div>
-      <span class="blog-date">Aug 14, 2026</span>
-    </div>
-    <div class="blog-row">
-      <div class="blog-left">
-        <span class="blog-cat">SOC</span>
-        <span class="blog-title">SOC L1 roadmap — fresher se analyst tak ka safar</span>
-      </div>
-      <span class="blog-date">Aug 8, 2026</span>
-    </div>
+<section class="sec" id="blog">
+  <div class="sec-head">
+    <span class="sec-num">03</span>
+    <span class="sec-title">Blog & Research</span>
   </div>
-  <div style="margin-top: 32px;">
-    <a href="#" class="btn-outline">View all posts →</a>
+  <div class="sec-body">
+    <a href="https://itstudent13.wordpress.com/" target="_blank">
+      <div class="blog-row">
+        <span class="blog-cat">BUG BOUNTY</span>
+        <span class="blog-t">How I found my first bug on HackerOne — full walkthrough</span>
+        <span class="blog-d">SEP 10</span>
+      </div>
+    </a>
+    <a href="https://itstudent13.wordpress.com/" target="_blank">
+      <div class="blog-row">
+        <span class="blog-cat">OWASP</span>
+        <span class="blog-t">OWASP Top 10 explained in Hindi — simple aur seedha</span>
+        <span class="blog-d">SEP 05</span>
+      </div>
+    </a>
+    <a href="https://itstudent13.wordpress.com/" target="_blank">
+      <div class="blog-row">
+        <span class="blog-cat">AI + LINUX</span>
+        <span class="blog-t">Running Ollama on cheap hardware — complete guide</span>
+        <span class="blog-d">AUG 28</span>
+      </div>
+    </a>
+    <a href="https://itstudent13.wordpress.com/" target="_blank">
+      <div class="blog-row">
+        <span class="blog-cat">WEB SEC</span>
+        <span class="blog-t">Web Cache Deception — what it is and how to find it</span>
+        <span class="blog-d">AUG 20</span>
+      </div>
+    </a>
+    <a href="https://itstudent13.wordpress.com/" target="_blank">
+      <div class="blog-row">
+        <span class="blog-cat">PHILOSOPHY</span>
+        <span class="blog-t">The psychology of a hacker — curiosity, power, and ethics</span>
+        <span class="blog-d">AUG 14</span>
+      </div>
+    </a>
+    <a href="https://itstudent13.wordpress.com/" class="view-all" target="_blank">View all posts on the blog →</a>
   </div>
 </section>
 
 <!-- CYBER AWARENESS -->
-<section class="awareness-section" id="awareness">
-  <div class="awareness-inner">
-    <div class="section-label">// Cyber Awareness — CyberBachao</div>
-    <div class="section-title">Sabhi ko cyber attacks se bachana — honest info, free mein.</div>
-    <p style="color: var(--gray); font-size: 14px; max-width: 560px; line-height: 1.7;">
-      Our mission: every person should know how to protect themselves online. No paid walls, no fake promises. Real precautions, real knowledge.
+<section class="sec" id="awareness">
+  <div class="sec-head">
+    <span class="sec-num">04</span>
+    <span class="sec-title">CyberBachao — Free Awareness</span>
+  </div>
+  <div class="sec-body">
+    <p class="aware-intro">
+      Sabhi logon ko cyber attacks se bachana — koi paywall nahi, koi fake promise nahi. Real precautions, seedha aur honest.
     </p>
-    <div class="awareness-grid">
-      <div class="awareness-card">
-        <span class="awareness-icon">[01]</span>
-        <div class="awareness-title">Phishing Attacks</div>
-        <div class="awareness-desc">Fake links, fake emails, fake websites — how attackers trap you and how to spot them instantly.</div>
-      </div>
-      <div class="awareness-card">
-        <span class="awareness-icon">[02]</span>
-        <div class="awareness-title">Password Safety</div>
-        <div class="awareness-desc">Why "password123" will get you hacked. How to create and manage strong passwords for free.</div>
-      </div>
-      <div class="awareness-card">
-        <span class="awareness-icon">[03]</span>
-        <div class="awareness-title">Public WiFi Risks</div>
-        <div class="awareness-desc">What hackers can do on public networks. Simple steps to protect yourself every time you connect.</div>
-      </div>
-      <div class="awareness-card">
-        <span class="awareness-icon">[04]</span>
-        <div class="awareness-title">Social Engineering</div>
-        <div class="awareness-desc">How attackers manipulate people — not machines. The most dangerous attack vector explained simply.</div>
-      </div>
-      <div class="awareness-card">
-        <span class="awareness-icon">[05]</span>
-        <div class="awareness-title">Mobile Security</div>
-        <div class="awareness-desc">App permissions, spy apps, SIM swap attacks — how to keep your phone safe from real threats.</div>
-      </div>
-      <div class="awareness-card">
-        <span class="awareness-icon">[06]</span>
-        <div class="awareness-title">UPI & Banking Scams</div>
-        <div class="awareness-desc">India-specific scams targeting UPI, OTP fraud, and fake customer care — real cases, real solutions.</div>
+    <div class="aware-row">
+      <div class="aware-n">01</div>
+      <div>
+        <div class="aware-title">Phishing Attacks</div>
+        <div class="aware-desc">Fake links, fake emails, fake websites — how attackers trap you and exactly how to spot them.</div>
       </div>
     </div>
-    <div style="margin-top: 32px;">
-      <a href="#" class="btn-primary">Read All Safety Guides →</a>
+    <div class="aware-row">
+      <div class="aware-n">02</div>
+      <div>
+        <div class="aware-title">UPI & Banking Scams</div>
+        <div class="aware-desc">India-specific — UPI fraud, OTP scams, fake customer care numbers. Real cases, real solutions.</div>
+      </div>
     </div>
+    <div class="aware-row">
+      <div class="aware-n">03</div>
+      <div>
+        <div class="aware-title">Password Safety</div>
+        <div class="aware-desc">Why "password123" will get you hacked. Free tools to manage strong passwords properly.</div>
+      </div>
+    </div>
+    <div class="aware-row">
+      <div class="aware-n">04</div>
+      <div>
+        <div class="aware-title">Public WiFi Risks</div>
+        <div class="aware-desc">What a hacker can do on the same network as you. Simple steps, zero cost to protect yourself.</div>
+      </div>
+    </div>
+    <div class="aware-row">
+      <div class="aware-n">05</div>
+      <div>
+        <div class="aware-title">Mobile Security</div>
+        <div class="aware-desc">App permissions, spy apps, SIM swap — how to actually keep your phone safe from real threats.</div>
+      </div>
+    </div>
+    <div class="aware-row">
+      <div class="aware-n">06</div>
+      <div>
+        <div class="aware-title">Social Engineering</div>
+        <div class="aware-desc">Attackers who target people, not machines. The most dangerous vector — explained simply.</div>
+      </div>
+    </div>
+    <a href="https://itstudent13.wordpress.com/" class="view-all" target="_blank" style="margin-top:28px;display:inline-block">Read all guides on the blog →</a>
   </div>
 </section>
-
-<!-- FOCUS AREAS -->
-<section class="section">
-  <div class="section-label">// Focus Areas</div>
-  <div class="section-title">What this lab works on.</div>
-  <div class="focus-grid">
-    <div class="focus-card">
-      <div class="focus-num">01 / Web Security</div>
-      <div class="focus-title">Bug Bounty & Web Hacking</div>
-      <div class="focus-desc">OWASP Top 10, recon pipelines, and real-world vulnerability research on HackerOne (handle: ban360).</div>
-    </div>
-    <div class="focus-card">
-      <div class="focus-num">02 / Systems</div>
-      <div class="focus-title">Linux & SaraSec Platform</div>
-      <div class="focus-desc">Building SaraSec — a Linux-native security platform for real-time telemetry, monitoring, and threat detection.</div>
-    </div>
-    <div class="focus-card">
-      <div class="focus-num">03 / AI Research</div>
-      <div class="focus-title">Multi-Agent AI Systems</div>
-      <div class="focus-desc">Researching distributed intelligence and autonomous agent architectures — octopus-inspired multi-agent coordination.</div>
-    </div>
-  </div>
-</section>
-
-<hr class="divider">
 
 <!-- ABOUT -->
-<section class="section" id="about">
-  <div class="about-wrap">
-    <div class="about-left">
-      <div class="section-label">// The Creator</div>
-      <h2>Abhijeet<br>Banwari.<br>Ron.</h2>
-      <p>
-        Security researcher, systems builder, and cyber educator. BCA graduate from Makhanlal Chaturvedi University, Bhopal.
-      </p>
-      <p>
-        I spend time auditing web applications, engineering Linux security systems, and building courses that make cybersecurity accessible to everyone — not just people who can afford expensive bootcamps.
-      </p>
-      <p>
-        Core work: HackerOne (ban360) · SaraSec platform · Multi-agent AI · Content in Hindi + English.
-      </p>
-      <div style="margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap;">
-        <a href="https://github.com/AbhijeetRON" class="btn-outline" target="_blank">GitHub →</a>
-        <a href="https://linkedin.com/in/abhijeetron" class="btn-outline" target="_blank">LinkedIn →</a>
+<section class="sec" id="about">
+  <div class="sec-head">
+    <span class="sec-num">05</span>
+    <span class="sec-title">The Creator</span>
+  </div>
+  <div class="sec-body">
+    <div class="about-grid">
+      <div>
+        <div class="about-bio-name">
+          <span>Abhijeet Banwari</span>
+          RON.
+        </div>
+        <p class="about-p">Security researcher, systems builder, cyber educator. BCA from Makhanlal Chaturvedi University, Bhopal.</p>
+        <p class="about-p">Web application audits, Linux security systems, bug bounty on HackerOne (ban360), AI labs — aur ye sab content Hindi + English mein, sabke liye.</p>
+        <p class="about-p">Core projects: SaraSec (Linux telemetry platform) · Multi-agent AI research · CyberBachao awareness initiative.</p>
       </div>
-    </div>
-    <div class="about-links">
-      <div class="about-link-row">
-        <span>GitHub</span>
-        <span>github.com/AbhijeetRON →</span>
-      </div>
-      <div class="about-link-row">
-        <span>LinkedIn</span>
-        <span>abhijeetron →</span>
-      </div>
-      <div class="about-link-row">
-        <span>HackerOne</span>
-        <span>ban360 →</span>
-      </div>
-      <div class="about-link-row">
-        <span>YouTube</span>
-        <span>@JewRON →</span>
-      </div>
-      <div class="about-link-row">
-        <span>Fiverr</span>
-        <span>abhijeetbanwari →</span>
-      </div>
-      <div class="about-link-row">
-        <span>Email</span>
-        <span>abhijeet.rom@gmail.com →</span>
+      <div class="connect-list">
+        <div class="connect-row">
+          <span class="connect-platform">GITHUB</span>
+          <a href="https://github.com/AbhijeetRON" target="_blank" class="connect-handle">AbhijeetRON →</a>
+        </div>
+        <div class="connect-row">
+          <span class="connect-platform">LINKEDIN</span>
+          <a href="https://linkedin.com/in/abhijeetron" target="_blank" class="connect-handle">abhijeetron →</a>
+        </div>
+        <div class="connect-row">
+          <span class="connect-platform">HACKERONE</span>
+          <span class="connect-handle">ban360</span>
+        </div>
+        <div class="connect-row">
+          <span class="connect-platform">YOUTUBE</span>
+          <a href="https://youtube.com/@JewRON" target="_blank" class="connect-handle">@JewRON →</a>
+        </div>
+        <div class="connect-row">
+          <span class="connect-platform">WORDPRESS BLOG</span>
+          <a href="https://itstudent13.wordpress.com/" target="_blank" class="connect-handle">itstudent13 →</a>
+        </div>
+        <div class="connect-row">
+          <span class="connect-platform">FIVERR</span>
+          <a href="https://fiverr.com/abhijeetbanwari" target="_blank" class="connect-handle">abhijeetbanwari →</a>
+        </div>
+        <div class="connect-row">
+          <span class="connect-platform">MAIL</span>
+          <a href="mailto:abhijeet.rom@gmail.com" class="connect-handle">abhijeet.rom@gmail.com →</a>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
-<footer>
-  <div style="font-family: var(--mono);">
-    © 2026 THE RON · Security Research & Digital Philosophy
-  </div>
-  <div class="footer-links">
-    <a href="https://github.com/AbhijeetRON">GitHub</a>
-    <a href="https://linkedin.com/in/abhijeetron">LinkedIn</a>
-    <a href="#">HackerOne</a>
-    <a href="#">YouTube</a>
+<footer class="footer">
+  <div class="footer-left">© 2026 THE RON · Security Research & Digital Philosophy · Bhopal, India</div>
+  <div class="footer-right">
+    <a href="https://github.com/AbhijeetRON" target="_blank">GitHub</a>
+    <a href="https://linkedin.com/in/abhijeetron" target="_blank">LinkedIn</a>
+    <a href="https://itstudent13.wordpress.com/" target="_blank">Blog</a>
+    <a href="https://youtube.com/@JewRON" target="_blank">YouTube</a>
     <a href="mailto:abhijeet.rom@gmail.com">Mail</a>
   </div>
 </footer>
