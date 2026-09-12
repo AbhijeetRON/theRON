@@ -4,16 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>THE RON — Security Research, Systems & Education</title>
-<meta name="description" content="Web security research, Linux systems engineering, AI labs, and cyber education by Abhijeet (RON).">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg:#0c0c0c;--surface:#111111;--fg:#e8e6df;--dim:#7a7a7a;--dimmer:#3a3a3a;
-  --green:#b8ff57;--red:#ff4040;--blue:#4C7CF0;--line:#1c1c1c;--line-strong:#2a2a2a;
-}
+:root{--bg:#0c0c0c;--surface:#111111;--fg:#e8e6df;--dim:#7a7a7a;--green:#b8ff57;--red:#ff4040;--blue:#4C7CF0;--line:#1c1c1c;--line-strong:#2a2a2a;}
 html{scroll-behavior:smooth;scroll-padding-top:80px}
 body{background:var(--bg);color:var(--fg);font-family:'Space Grotesk',sans-serif;font-size:16px;line-height:1.55;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
@@ -67,6 +63,7 @@ a{color:inherit;text-decoration:none}
 .tag-live{color:var(--red);border:1px solid var(--red)}
 .tag-new{color:var(--fg);border:1px solid var(--line-strong)}
 .tag-ai{color:var(--blue);border:1px solid var(--blue)}
+.c-price{font-family:'Space Mono',monospace;font-size:15px;color:var(--green);white-space:nowrap;text-align:right}
 .enroll-btn{display:inline-block;margin-top:8px;font-family:'Space Mono',monospace;font-size:11px;color:var(--bg);background:var(--green);padding:7px 14px;letter-spacing:1px;cursor:pointer;transition:opacity 0.15s}
 .enroll-btn:hover{opacity:0.85}
 .live-wrap{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;padding:28px;border:1px solid var(--red);margin-bottom:24px}
@@ -95,7 +92,7 @@ a{color:inherit;text-decoration:none}
 .proj-desc{font-size:13px;color:var(--dim);line-height:1.65;margin-bottom:12px}
 .proj-stack{display:flex;flex-wrap:wrap;gap:6px}
 .proj-stack span{font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);border:1px solid var(--line-strong);padding:2px 8px;letter-spacing:0.5px}
-.aware-intro{font-size:15px;font-weight:400;color:var(--dim);max-width:640px;line-height:1.7;margin-bottom:36px;border-left:2px solid var(--line-strong);padding-left:20px}
+.aware-intro{font-size:15px;color:var(--dim);max-width:640px;line-height:1.7;margin-bottom:36px;border-left:2px solid var(--line-strong);padding-left:20px}
 .aware-row{display:grid;grid-template-columns:40px 1fr;gap:20px;padding:18px 0;border-bottom:1px solid var(--line);align-items:start}
 .aware-row:last-child{border-bottom:none}
 .aware-n{font-family:'Space Mono',monospace;font-size:13px;color:var(--green);font-weight:700}
@@ -103,11 +100,11 @@ a{color:inherit;text-decoration:none}
 .aware-desc{font-size:13px;color:var(--dim);line-height:1.65}
 .about-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:60px}
 .about-name{font-size:38px;font-weight:700;letter-spacing:-1.5px;line-height:1;margin-bottom:24px}
-.about-name span{display:block;color:var(--dim);font-weight:300;font-size:18px;letter-spacing:0;margin-bottom:6px;font-family:'Space Mono',monospace}
+.about-name span{display:block;color:var(--dim);font-weight:300;font-size:18px;margin-bottom:6px;font-family:'Space Mono',monospace}
 .about-p{font-size:14px;color:var(--dim);line-height:1.85;margin-bottom:16px}
 .about-p strong{color:var(--fg);font-weight:500}
 .about-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
-.about-tags span{font-family:'Space Mono',monospace;font-size:11px;color:var(--green);border:1px solid var(--line-strong);padding:4px 12px;letter-spacing:0.5px}
+.about-tags span{font-family:'Space Mono',monospace;font-size:11px;color:var(--green);border:1px solid var(--line-strong);padding:4px 12px}
 .connect-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);font-size:13px}
 .connect-row:first-child{border-top:1px solid var(--line)}
 .connect-platform{color:var(--dim);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1px}
@@ -116,7 +113,7 @@ a{color:inherit;text-decoration:none}
 .footer{padding:28px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
 .footer-left{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim)}
 .footer-right{display:flex;gap:24px;flex-wrap:wrap}
-.footer-right a{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);letter-spacing:1px;transition:color 0.15s}
+.footer-right a{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);letter-spacing:1px}
 .footer-right a:hover{color:var(--green)}
 .reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}
 .reveal.in{opacity:1;transform:translateY(0)}
@@ -126,10 +123,9 @@ a{color:inherit;text-decoration:none}
   .nav-burger{display:inline-block}
   .hero{grid-template-columns:1fr;padding:56px 20px 48px;gap:32px}
   .hero-right{display:none}
-  .hero-name{letter-spacing:-1.5px}
   .sec-head,.sec-body,.ticker,.footer{padding-left:20px;padding-right:20px}
   .course-row{grid-template-columns:30px 1fr;gap:12px}
-  .c-tag{display:none}
+  .c-tag,.c-price{display:none}
   .blog-row{grid-template-columns:90px 1fr;gap:12px}
   .blog-d{display:none}
   .projects-grid{grid-template-columns:1fr}
@@ -144,12 +140,8 @@ a{color:inherit;text-decoration:none}
 <nav class="nav">
   <div class="nav-logo">THE<b>RON</b></div>
   <div class="nav-r">
-    <a href="#research">Research</a>
-    <a href="#courses">Courses</a>
-    <a href="#live">Live</a>
-    <a href="#projects">Projects</a>
-    <a href="#awareness">Notes</a>
-    <a href="#about">About</a>
+    <a href="#research">Research</a><a href="#courses">Courses</a><a href="#live">Live</a>
+    <a href="#projects">Projects</a><a href="#awareness">Notes</a><a href="#about">About</a>
     <a class="nav-live" href="#live">● LIVE NOW</a>
   </div>
   <button class="nav-burger" onclick="openDrawer()"><i class="fa-solid fa-bars"></i></button>
@@ -157,10 +149,7 @@ a{color:inherit;text-decoration:none}
 
 <div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
 <aside class="drawer" id="drawer">
-  <div class="drawer-head">
-    <div class="drawer-title">// MENU</div>
-    <button class="drawer-close" onclick="closeDrawer()">&times;</button>
-  </div>
+  <div class="drawer-head"><div class="drawer-title">// MENU</div><button class="drawer-close" onclick="closeDrawer()">&times;</button></div>
   <a href="#research" onclick="closeDrawer()">Research</a>
   <a href="#courses" onclick="closeDrawer()">Courses</a>
   <a href="#live" onclick="closeDrawer()">Live Classes</a>
@@ -169,33 +158,25 @@ a{color:inherit;text-decoration:none}
   <a href="#about" onclick="closeDrawer()">About</a>
 </aside>
 
-<div class="ticker">
-  <span class="ticker-inner">
-    ALL-ACCESS PASS — $399 &nbsp;·&nbsp; 6 COURSES · 3 MONTHS &nbsp;·&nbsp; LIVE CLASS SUN 7PM IST — $99 &nbsp;·&nbsp; NEW: BURP SUITE PRO &nbsp;·&nbsp;&nbsp;&nbsp;&nbsp;
-    ALL-ACCESS PASS — $399 &nbsp;·&nbsp; 6 COURSES · 3 MONTHS &nbsp;·&nbsp; LIVE CLASS SUN 7PM IST — $99 &nbsp;·&nbsp; NEW: BURP SUITE PRO &nbsp;·&nbsp;&nbsp;&nbsp;&nbsp;
-  </span>
-</div>
+<div class="ticker"><span class="ticker-inner">
+  ALL 6 COURSES — $4,996 &nbsp;·&nbsp; $499 OFF BUNDLE &nbsp;·&nbsp; 3 MONTHS ACCESS &nbsp;·&nbsp; LIVE CLASS SUN 7PM IST — $99 &nbsp;·&nbsp;&nbsp;&nbsp;&nbsp;
+  ALL 6 COURSES — $4,996 &nbsp;·&nbsp; $499 OFF BUNDLE &nbsp;·&nbsp; 3 MONTHS ACCESS &nbsp;·&nbsp; LIVE CLASS SUN 7PM IST — $99 &nbsp;·&nbsp;&nbsp;&nbsp;&nbsp;
+</span></div>
 
 <section class="hero">
   <div class="hero-left">
     <div class="hero-eyebrow">// Security · Systems · AI · Education</div>
-    <div class="hero-name">
-      Breaking<br>
-      <span>systems to build</span>
-      better security.
-    </div>
-    <p class="hero-bio">
-      <strong>Abhijeet (RON)</strong> — I audit web applications, engineer Linux-native security tooling, and research multi-agent AI systems. Courses below cover the same material I work with daily, in Hindi &amp; English.
-    </p>
+    <div class="hero-name">Breaking<br><span>systems to build</span>better security.</div>
+    <p class="hero-bio"><strong>Abhijeet (RON)</strong> — I audit web applications, engineer Linux-native security tooling, and research multi-agent AI systems. Courses below cover the same material I work with daily, in Hindi &amp; English.</p>
   </div>
   <div class="hero-right">
     <div class="hero-right-label">// FIELD NOTES</div>
     <div class="hero-stat"><span class="stat-k">Active courses</span><span class="stat-v">06</span></div>
-    <div class="hero-stat"><span class="stat-k">All-access</span><span class="stat-v">$399</span></div>
-    <div class="hero-stat"><span class="stat-k">Live session</span><span class="stat-v">$99</span></div>
+    <div class="hero-stat"><span class="stat-k">Total value</span><span class="stat-v">$5,495</span></div>
+    <div class="hero-stat"><span class="stat-k">Bundle discount</span><span class="stat-v">−$499</span></div>
+    <div class="hero-stat"><span class="stat-k">Bundle price</span><span class="stat-v">$4,996</span></div>
     <div class="hero-stat"><span class="stat-k">Language</span><span class="stat-v">HI + EN</span></div>
     <div class="hero-stat"><span class="stat-k">HackerOne</span><span class="stat-v">ban360</span></div>
-    <div class="hero-stat"><span class="stat-k">Base</span><span class="stat-v">BHOPAL, IN</span></div>
   </div>
 </section>
 
@@ -214,31 +195,42 @@ a{color:inherit;text-decoration:none}
 <section class="sec reveal" id="courses">
   <div class="sec-head"><span class="sec-num">02</span><span class="sec-title">Courses</span></div>
   <div class="sec-body">
-    <div style="border:1px solid var(--green);padding:32px;margin-bottom:40px;position:relative">
-      <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--green);letter-spacing:2px;margin-bottom:12px">// ALL-ACCESS PASS</div>
-      <div style="font-size:28px;font-weight:700;letter-spacing:-1px;margin-bottom:8px">One Pass. Six Courses.</div>
-      <div style="font-size:15px;color:var(--dim);margin-bottom:20px">Access to all 6 courses below for 3 months. Delivered via email within 24 hours of purchase.</div>
-      <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:24px">
-        <span style="font-family:'Space Mono',monospace;font-size:32px;color:var(--green)">$399</span>
-        <s style="font-family:'Space Mono',monospace;font-size:16px;color:var(--dim)">$1,799</s>
+
+    <div style="border:1px solid var(--green);padding:32px;margin-bottom:40px">
+      <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--green);letter-spacing:2px;margin-bottom:12px">// BUNDLE</div>
+      <div style="font-size:28px;font-weight:700;letter-spacing:-1px;margin-bottom:8px">All 6 Courses. One Bundle.</div>
+      <div style="font-size:15px;color:var(--dim);margin-bottom:24px">3 months access. Delivered via email within 24 hours of purchase.</div>
+
+      <div style="border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong);padding:18px 0;margin-bottom:20px">
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:var(--dim)"><span>Web Hacking 101 — OWASP Top 10</span><span style="font-family:'Space Mono',monospace;color:var(--fg)">$899</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:var(--dim)"><span>Bug Bounty — Zero to First Report</span><span style="font-family:'Space Mono',monospace;color:var(--fg)">$1,499</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:var(--dim)"><span>Linux for Hackers — Complete Basics</span><span style="font-family:'Space Mono',monospace;color:var(--green)">FREE</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:var(--dim)"><span>Burp Suite Pro — Practical Hacking</span><span style="font-family:'Space Mono',monospace;color:var(--fg)">$999</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:var(--dim)"><span>Local LLMs for Hackers — Ollama &amp; Beyond</span><span style="font-family:'Space Mono',monospace;color:var(--fg)">$799</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:var(--dim)"><span>SOC L1 Analyst — Roadmap</span><span style="font-family:'Space Mono',monospace;color:var(--fg)">$1,299</span></div>
       </div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px">
-        <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);border:1px solid var(--line-strong);padding:4px 10px">WEB HACKING 101</span>
-        <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);border:1px solid var(--line-strong);padding:4px 10px">BUG BOUNTY</span>
-        <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);border:1px solid var(--line-strong);padding:4px 10px">LINUX FOR HACKERS</span>
-        <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);border:1px solid var(--line-strong);padding:4px 10px">BURP SUITE PRO</span>
-        <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);border:1px solid var(--line-strong);padding:4px 10px">LOCAL LLMS</span>
-        <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);border:1px solid var(--line-strong);padding:4px 10px">SOC L1 ROADMAP</span>
+
+      <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:var(--dim)">
+        <span>Total value</span><span style="font-family:'Space Mono',monospace;color:var(--fg)">$5,495</span>
       </div>
-      <a href="#" class="enroll-btn" style="font-size:13px;padding:12px 28px">Get All-Access Pass →</a>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:var(--dim)">
+        <span>Bundle discount</span><span style="font-family:'Space Mono',monospace;color:var(--red)">− $499</span>
+      </div>
+
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-top:20px;padding-top:20px;border-top:1px solid var(--line-strong)">
+        <span style="font-size:13px;color:var(--dim);letter-spacing:1px;text-transform:uppercase;font-family:'Space Mono',monospace">You pay</span>
+        <span style="font-family:'Space Mono',monospace;font-size:34px;color:var(--green);font-weight:700">$4,996</span>
+      </div>
+
+      <a href="#" class="enroll-btn" style="font-size:13px;padding:12px 28px;margin-top:22px">Get the Bundle →</a>
     </div>
 
-    <div class="course-row"><div class="c-num">01</div><div class="c-info"><div class="c-name">Web Hacking 101 — OWASP Top 10</div><div class="c-meta">6 hrs · Hindi + English · Practical labs</div></div><div class="c-tag tag-new">NEW</div></div>
-    <div class="course-row"><div class="c-num">02</div><div class="c-info"><div class="c-name">Bug Bounty — Zero to First Report</div><div class="c-meta">8 sessions · Live on Meet · All levels</div></div><div class="c-tag tag-live">LIVE</div></div>
-    <div class="course-row"><div class="c-num">03</div><div class="c-info"><div class="c-name">Linux for Hackers — Complete Basics</div><div class="c-meta">3 hrs · Hindi · Beginner-friendly</div></div><div class="c-tag tag-free">FREE</div></div>
-    <div class="course-row"><div class="c-num">04</div><div class="c-info"><div class="c-name">Burp Suite Pro — Practical Hacking</div><div class="c-meta">4 hrs · Hindi + English · Intermediate</div></div><div class="c-tag tag-new">NEW</div></div>
-    <div class="course-row"><div class="c-num">05</div><div class="c-info"><div class="c-name">Local LLMs for Hackers — Ollama &amp; Beyond</div><div class="c-meta">4 hrs · Hindi + English · Intermediate</div></div><div class="c-tag tag-ai">AI</div></div>
-    <div class="course-row"><div class="c-num">06</div><div class="c-info"><div class="c-name">SOC L1 Analyst — Job-Ready Roadmap</div><div class="c-meta">8 hrs · Hindi · From fundamentals to interviews</div></div><div class="c-tag tag-new">SOC</div></div>
+    <div class="course-row"><div class="c-num">01</div><div class="c-info"><div class="c-name">Web Hacking 101 — OWASP Top 10</div><div class="c-meta">6 hrs · Hindi + English · Practical labs</div></div><div class="c-tag tag-new">NEW</div><div class="c-price">$899</div></div>
+    <div class="course-row"><div class="c-num">02</div><div class="c-info"><div class="c-name">Bug Bounty — Zero to First Report</div><div class="c-meta">8 sessions · Live on Meet · All levels</div></div><div class="c-tag tag-live">LIVE</div><div class="c-price">$1,499</div></div>
+    <div class="course-row"><div class="c-num">03</div><div class="c-info"><div class="c-name">Linux for Hackers — Complete Basics</div><div class="c-meta">3 hrs · Hindi · Beginner-friendly</div></div><div class="c-tag tag-free">FREE</div><div class="c-price">$0</div></div>
+    <div class="course-row"><div class="c-num">04</div><div class="c-info"><div class="c-name">Burp Suite Pro — Practical Hacking</div><div class="c-meta">4 hrs · Hindi + English · Intermediate</div></div><div class="c-tag tag-new">NEW</div><div class="c-price">$999</div></div>
+    <div class="course-row"><div class="c-num">05</div><div class="c-info"><div class="c-name">Local LLMs for Hackers — Ollama &amp; Beyond</div><div class="c-meta">4 hrs · Hindi + English · Intermediate</div></div><div class="c-tag tag-ai">AI</div><div class="c-price">$799</div></div>
+    <div class="course-row"><div class="c-num">06</div><div class="c-info"><div class="c-name">SOC L1 Analyst — Job-Ready Roadmap</div><div class="c-meta">8 hrs · Hindi · From fundamentals to interviews</div></div><div class="c-tag tag-new">SOC</div><div class="c-price">$1,299</div></div>
   </div>
 </section>
 
@@ -263,41 +255,18 @@ a{color:inherit;text-decoration:none}
   <div class="sec-head"><span class="sec-num">04</span><span class="sec-title">Projects &amp; Labs</span></div>
   <div class="sec-body" style="padding:0">
     <div class="projects-grid">
-      <div class="proj">
-        <div class="proj-tag">// LINUX · C++</div>
-        <div class="proj-title">SaraSec</div>
-        <div class="proj-desc">Linux-native security &amp; telemetry platform. Real-time system monitoring, network visibility, and intrusion detection in a single environment.</div>
-        <div class="proj-stack"><span>C++</span><span>Linux</span><span>Networking</span><span>Telemetry</span></div>
-      </div>
-      <div class="proj">
-        <div class="proj-tag">// AI · RESEARCH</div>
-        <div class="proj-title">Multi-Agent Intelligence</div>
-        <div class="proj-desc">Distributed intelligence research. Autonomous agents that operate independently while coordinating toward shared goals.</div>
-        <div class="proj-stack"><span>Python</span><span>LLMs</span><span>Multi-Agent</span></div>
-      </div>
-      <div class="proj">
-        <div class="proj-tag">// WEB SECURITY</div>
-        <div class="proj-title">Web Vulnerability Scanner</div>
-        <div class="proj-desc">OWASP-aligned automated scanner. Detects common web application flaws during recon and audit workflows.</div>
-        <div class="proj-stack"><span>Python</span><span>OWASP</span><span>Recon</span></div>
-      </div>
-      <div class="proj">
-        <div class="proj-tag">// AUTOMATION</div>
-        <div class="proj-title">AI Support Chatbot</div>
-        <div class="proj-desc">Customer support chatbot with FAQ matching and optional LLM fallback. Built for real business deployments.</div>
-        <div class="proj-stack"><span>Python</span><span>Flask</span><span>LLM</span></div>
-      </div>
+      <div class="proj"><div class="proj-tag">// LINUX · C++</div><div class="proj-title">SaraSec</div><div class="proj-desc">Linux-native security &amp; telemetry platform. Real-time system monitoring, network visibility, and intrusion detection in a single environment.</div><div class="proj-stack"><span>C++</span><span>Linux</span><span>Networking</span><span>Telemetry</span></div></div>
+      <div class="proj"><div class="proj-tag">// AI · RESEARCH</div><div class="proj-title">Multi-Agent Intelligence</div><div class="proj-desc">Distributed intelligence research. Autonomous agents that operate independently while coordinating toward shared goals.</div><div class="proj-stack"><span>Python</span><span>LLMs</span><span>Multi-Agent</span></div></div>
+      <div class="proj"><div class="proj-tag">// WEB SECURITY</div><div class="proj-title">Web Vulnerability Scanner</div><div class="proj-desc">OWASP-aligned automated scanner. Detects common web application flaws during recon and audit workflows.</div><div class="proj-stack"><span>Python</span><span>OWASP</span><span>Recon</span></div></div>
+      <div class="proj"><div class="proj-tag">// AUTOMATION</div><div class="proj-title">AI Support Chatbot</div><div class="proj-desc">Customer support chatbot with FAQ matching and optional LLM fallback. Built for real business deployments.</div><div class="proj-stack"><span>Python</span><span>Flask</span><span>LLM</span></div></div>
     </div>
   </div>
 </section>
 
-<!-- AWARENESS — cleaned up -->
 <section class="sec reveal" id="awareness">
   <div class="sec-head"><span class="sec-num">05</span><span class="sec-title">Cyber Notes</span></div>
   <div class="sec-body">
-    <p class="aware-intro">
-      Short notes on common attack types and the precautions published by security bodies. Free to read.
-    </p>
+    <p class="aware-intro">Short notes on common attack types and the precautions published by security bodies. Free to read.</p>
     <div class="aware-row"><div class="aware-n">01</div><div><div class="aware-title">Phishing</div><div class="aware-desc">Fake links, emails, and login pages. How these attacks are structured and the signals that identify them.</div></div></div>
     <div class="aware-row"><div class="aware-n">02</div><div><div class="aware-title">UPI &amp; Banking Fraud</div><div class="aware-desc">UPI request scams, OTP fraud, and fake customer care numbers. Common patterns seen in India.</div></div></div>
     <div class="aware-row"><div class="aware-n">03</div><div><div class="aware-title">Password Practices</div><div class="aware-desc">Common password weaknesses and free tools used for managing credentials.</div></div></div>
@@ -313,19 +282,11 @@ a{color:inherit;text-decoration:none}
   <div class="sec-body">
     <div class="about-grid">
       <div>
-        <div class="about-name">
-          <span>Abhijeet (RON)</span>
-          Security Researcher &amp; Systems Builder.
-        </div>
+        <div class="about-name"><span>Abhijeet (RON)</span>Security Researcher &amp; Systems Builder.</div>
         <p class="about-p">I work at the intersection of <strong>offensive security, systems engineering, and applied AI</strong>. My work involves auditing web applications, building Linux-native security tooling, and researching how autonomous agents can coordinate on real problems.</p>
         <p class="about-p">The courses on this site cover the same material I work with: OWASP fundamentals, bug bounty workflows, Linux tooling, and local LLM setup. Delivered in Hindi and English.</p>
         <p class="about-p">Currently focused on: bug bounty research on HackerOne, SaraSec development, and multi-agent AI systems.</p>
-        <div class="about-tags">
-          <span>WEB SECURITY</span>
-          <span>BUG BOUNTY</span>
-          <span>LINUX SYSTEMS</span>
-          <span>AI / LLMs</span>
-        </div>
+        <div class="about-tags"><span>WEB SECURITY</span><span>BUG BOUNTY</span><span>LINUX SYSTEMS</span><span>AI / LLMs</span></div>
       </div>
       <div>
         <div class="connect-row"><span class="connect-platform">GITHUB</span><a href="https://github.com/AbhijeetRON" target="_blank" class="connect-handle">AbhijeetRON →</a></div>
