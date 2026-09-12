@@ -1,2 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE RON — Security Research, Systems & Education</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0c0c0c;--surface:#111111;--fg:#e8e6df;--dim:#7a7a7a;--green:#b8ff57;--red:#ff4040;--blue:#4C7CF0;--line:#1c1c1c;--line-strong:#2a2a2a;}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{background:var(--bg);color:var(--fg);font-family:'Space Grotesk',sans-serif;font-size:16px;line-height:1.55;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:18px 40px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(12,12,12,0.95);backdrop-filter:blur(8px);z-index:99}
+.nav-logo{font-family:'Space Mono',monospace;font-size:14px;letter-spacing:3px;font-weight:700}
+.nav-logo b{color:var(--green)}
+.nav-r{display:flex;gap:32px;align-items:center}
+.nav-r a{font-size:12px;letter-spacing:1px;color:var(--dim);transition:color 0.15s}
+.nav-r a:hover{color:var(--fg)}
+.nav-live{font-family:'Space Mono',monospace;font-size:11px;color:var(--red);border:1px solid var(--red);padding:6px 14px;letter-spacing:1px;animation:blink 2s infinite}
+.nav-burger{display:none;background:transparent;border:1px solid var(--line-strong);color:var(--fg);padding:8px 12px;cursor:pointer;font-size:16px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.5}}
+.drawer{position:fixed;top:0;right:-320px;width:300px;height:100vh;background:var(--surface);border-left:1px solid var(--line-strong);z-index:200;transition:right 0.3s ease;padding:26px 22px}
+.drawer.on{right:0}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:150;display:none}
+.drawer-overlay.on{display:block}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.drawer-title{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:2px;color:var(--dim)}
+.drawer-close{background:transparent;border:none;color:var(--dim);font-size:22px;cursor:pointer}
+.drawer a{display:block;padding:14px 0;border-bottom:1px solid var(--line);font-size:14px;color:var(--fg)}
+.drawer a:hover{color:var(--green)}
+.ticker{border-bottom:1px solid var(--line);padding:12px 40px;font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);overflow:hidden;white-space:nowrap}
+.ticker-inner{display:inline-block;animation:tick 40s linear infinite}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.hero{padding:80px 40px 64px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr 340px;gap:60px;align-items:end}
+.hero-eyebrow{font-family:'Space Mono',monospace;font-size:11px;color:var(--green);letter-spacing:2px;margin-bottom:28px;display:flex;align-items:center;gap:10px}
+.hero-eyebrow::before{content:'';width:6px;height:6px;background:var(--green);border-radius:50%}
+.hero-name{font-size:clamp(2.8rem,7vw,5.5rem);font-weight:700;line-height:0.95;letter-spacing:-3px;margin-bottom:32px}
+.hero-name span{display:block;color:var(--dim);font-weight:300}
+.hero-bio{font-size:15px;color:var(--dim);max-width:520px;line-height:1.8;border-left:2px solid var(--green);padding-left:20px}
+.hero-bio strong{color:var(--fg);font-weight:500}
+.hero-right{border:1px solid var(--line);padding:24px;align-self:start}
+.hero-right-label{font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);letter-spacing:2px;margin-bottom:16px}
+.hero-stat{padding:12px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:baseline}
+.hero-stat:last-child{border-bottom:none}
+.stat-k{font-size:12px;color:var(--dim)}
+.stat-v{font-family:'Space Mono',monospace;font-size:13px;color:var(--green)}
+.sec{border-bottom:1px solid var(--line)}
+.sec-head{display:flex;align-items:baseline;gap:16px;padding:32px 40px 0;margin-bottom:32px}
+.sec-num{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim)}
+.sec-title{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--dim)}
+.sec-body{padding:0 40px 48px}
+.course-row{display:grid;grid-template-columns:40px 1fr auto auto;gap:24px;align-items:baseline;padding:20px 0;border-bottom:1px solid var(--line);transition:background 0.15s}
+.course-row:last-child{border-bottom:none}
+.course-row:hover{background:rgba(255,255,255,0.02)}
+.c-num{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim)}
+.c-name{font-size:16px;font-weight:500;margin-bottom:4px}
+.c-meta{font-size:12px;color:var(--dim)}
+.c-tag{font-family:'Space Mono',monospace;font-size:10px;padding:3px 10px;letter-spacing:1px}
+.tag-free{color:var(--green);border:1px solid var(--green)}
+.tag-live{color:var(--red);border:1px solid var(--red)}
+.tag-new{color:var(--fg);border:1px solid var(--line-strong)}
+.tag-ai{color:var(--blue);border:1px solid var(--blue)}
+.c-price{font-family:'Space Mono',monospace;font-size:15px;color:var(--green);white-space:nowrap;text-align:right}
+.enroll-btn{display:inline-block;margin-top:8px;font-family:'Space Mono',monospace;font-size:11px;color:var(--bg);background:var(--green);padding:7px 14px;letter-spacing:1px;cursor:pointer;transition:opacity 0.15s}
+.enroll-btn:hover{opacity:0.85}
+.live-wrap{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;padding:28px;border:1px solid var(--red);margin-bottom:24px}
+.live-dot-row{display:flex;align-items:center;gap:10px;font-family:'Space Mono',monospace;font-size:11px;color:var(--red);letter-spacing:1px;margin-bottom:12px}
+.ldot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:blink 1.2s infinite}
+.live-title{font-size:20px;font-weight:600;margin-bottom:6px}
+.live-sub{font-size:13px;color:var(--dim)}
+.up-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);font-size:13px}
+.up-row:last-child{border-bottom:none}
+.up-date{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);min-width:100px}
+.up-price{font-family:'Space Mono',monospace;font-size:12px;color:var(--green)}
+.blog-row{display:grid;grid-template-columns:130px 1fr 90px;gap:24px;align-items:baseline;padding:18px 0;border-bottom:1px solid var(--line);transition:all 0.15s}
+.blog-row:last-child{border-bottom:none}
+.blog-row:hover .blog-t{color:var(--green)}
+.blog-cat{font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);letter-spacing:1px}
+.blog-t{font-size:15px;font-weight:400;transition:color 0.15s}
+.blog-d{font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);text-align:right}
+.view-all{display:inline-block;margin-top:24px;font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);letter-spacing:1px;border-bottom:1px solid var(--dim);padding-bottom:2px;transition:color 0.15s}
+.view-all:hover{color:var(--green);border-color:var(--green)}
+.projects-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--line)}
+.proj{padding:26px 32px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);transition:background 0.15s}
+.proj:hover{background:rgba(255,255,255,0.02)}
+.proj:nth-child(2n){border-right:none}
+.proj-tag{font-family:'Space Mono',monospace;font-size:10px;color:var(--green);letter-spacing:1px;margin-bottom:10px}
+.proj-title{font-size:17px;font-weight:600;margin-bottom:8px}
+.proj-desc{font-size:13px;color:var(--dim);line-height:1.65;margin-bottom:12px}
+.proj-stack{display:flex;flex-wrap:wrap;gap:6px}
+.proj-stack span{font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);border:1px solid var(--line-strong);padding:2px 8px;letter-spacing:0.5px}
+.aware-intro{font-size:15px;color:var(--dim);max-width:640px;line-height:1.7;margin-bottom:36px;border-left:2px solid var(--line-strong);padding-left:20px}
+.aware-row{display:grid;grid-template-columns:40px 1fr;gap:20px;padding:18px 0;border-bottom:1px solid var(--line);align-items:start}
+.aware-row:last-child{border-bottom:none}
+.aware-n{font-family:'Space Mono',monospace;font-size:13px;color:var(--green);font-weight:700}
+.aware-title{font-size:15px;font-weight:500;margin-bottom:4px}
+.aware-desc{font-size:13px;color:var(--dim);line-height:1.65}
+.about-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:60px}
+.about-name{font-size:38px;font-weight:700;letter-spacing:-1.5px;line-height:1;margin-bottom:24px}
+.about-name span{display:block;color:var(--dim);font-weight:300;font-size:18px;margin-bottom:6px;font-family:'Space Mono',monospace}
+.about-p{font-size:14px;color:var(--dim);line-height:1.85;margin-bottom:16px}
+.about-p strong{color:var(--fg);font-weight:500}
+.about-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.about-tags span{font-family:'Space Mono',monospace;font-size:11px;color:var(--green);border:1px solid var(--line-strong);padding:4px 12px}
+.connect-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);font-size:13px}
+.connect-row:first-child{border-top:1px solid var(--line)}
+.connect-platform{color:var(--dim);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1px}
+.connect-handle{color:var(--green);font-family:'Space Mono',monospace;font-size:12px}
+.connect-handle:hover{text-decoration:underline}
+.footer{padding:28px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-left{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim)}
+.footer-right{display:flex;gap:24px;flex-wrap:wrap}
+.footer-right a{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);letter-spacing:1px}
+.footer-right a:hover{color:var(--green)}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+@media(max-width:900px){
+  .nav{padding:16px 20px}
+  .nav-r{display:none}
+  .nav-burger{display:inline-block}
+  .hero{grid-template-columns:1fr;padding:56px 20px 48px;gap:32px}
+  .hero-right{display:none}
+  .sec-head,.sec-body,.ticker,.footer{padding-left:20px;padding-right:20px}
+  .course-row{grid-template-columns:30px 1fr;gap:12px}
+  .c-tag,.c-price{display:none}
+  .blog-row{grid-template-columns:90px 1fr;gap:12px}
+  .blog-d{display:none}
+  .projects-grid{grid-template-columns:1fr}
+  .proj{border-right:none}
+  .about-grid{grid-template-columns:1fr;gap:32px}
+  .live-wrap{grid-template-columns:1fr;gap:16px}
+}
+</style>
+</head>
+<body>
 
-hey
+<nav class="nav">
+  <div class="nav-logo">THE<b>RON</b></div>
+  <div class="nav-r">
+    <a href="#research">Research</a><a href="#courses">Courses</a><a href="#live">Live</a>
+    <a href="#projects">Projects</a><a href="#awareness">Notes</a><a href="#about">About</a>
+    <a class="nav-live" href="#live">● LIVE NOW</a>
+  </div>
+  <button class="nav-burger" onclick="openDrawer()"><i class="fa-solid fa-bars"></i></button>
+</nav>
+
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head"><div class="drawer-title">// MENU</div><button class="drawer-close" onclick="closeDrawer()">&times;</button></div>
+  <a href="#research" onclick="closeDrawer()">Research</a>
+  <a href="#courses" onclick="closeDrawer()">Courses</a>
+  <a href="#live" onclick="closeDrawer()">Live Classes</a>
+  <a href="#projects" onclick="closeDrawer()">Projects</a>
+  <a href="#awareness" onclick="closeDrawer()">Notes</a>
+  <a href="#about" onclick="closeDrawer()">About</a>
+</aside>
+
+<div class="ticker"><span class="ticker-inner">
+  ALL 6 COURSES — $149 &nbsp;·&nbsp; $76 OFF BUNDLE &nbsp;·&nbsp; 3 MONTHS ACCESS &nbsp;·&nbsp; LIVE CLASS SUN 7PM IST — $19 &nbsp;·&nbsp;&nbsp;&nbsp;&nbsp;
+  ALL 6 COURSES — $149 &nbsp;·&nbsp; $76 OFF BUNDLE &nbsp;·&nbsp; 3 MONTHS ACCESS &nbsp;·&nbsp; LIVE CLASS SUN 7PM IST — $19 &nbsp;·&nbsp;&nbsp;&nbsp;&nbsp;
+</span></div>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">// Security · Systems · AI · Education</div>
+    <div class="hero-name">Breaking<br><span>systems to build</span>better security.</div>
+    <p class="hero-bio"><strong>Abhijeet (RON)</strong> — I audit web applications, engineer Linux-native security tooling, and research multi-agent AI systems. Courses below cover the same material I work with daily, in Hindi &amp; English.</p>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-label">// FIELD NOTES</div>
+    <div class="hero-stat"><span class="stat-k">Active courses</span><span class="stat-v">06</span></div>
+    <div class="hero-stat"><span class="stat-k">Total value</span><span class="stat-v">$225</span></div>
+    <div class="hero-stat"><span class="stat-k">Bundle discount</span><span class="stat-v">−$76</span></div>
+    <div class="hero-stat"><span class="stat-k">Bundle price</span><span class="stat-v">$149</span></div>
+    <div class="hero-stat"><span class="stat-k">Language</span><span class="stat-v">HI + EN</span></div>
+    <div class="hero-stat"><span class="stat-k">HackerOne</span><span class="stat-v">ban360</span></div>
+  </div>
+</section>
+
+<section class="sec reveal" id="research">
+  <div class="sec-head"><span class="sec-num">01</span><span class="sec-title">Research &amp; Dispatches</span></div>
+  <div class="sec-body">
+    <a href="#"><div class="blog-row"><span class="blog-cat">BUG BOUNTY</span><span class="blog-t">How I found my first bug on HackerOne — full walkthrough</span><span class="blog-d">SEP 10</span></div></a>
+    <a href="#"><div class="blog-row"><span class="blog-cat">OWASP</span><span class="blog-t">OWASP Top 10 in Hindi — seedha aur practical</span><span class="blog-d">SEP 05</span></div></a>
+    <a href="#"><div class="blog-row"><span class="blog-cat">AI + LINUX</span><span class="blog-t">Running Ollama on cheap hardware — complete guide</span><span class="blog-d">AUG 28</span></div></a>
+    <a href="#"><div class="blog-row"><span class="blog-cat">WEB SEC</span><span class="blog-t">Web Cache Deception — what it is and how to find it</span><span class="blog-d">AUG 20</span></div></a>
+    <a href="#"><div class="blog-row"><span class="blog-cat">PHILOSOPHY</span><span class="blog-t">The psychology of a hacker — curiosity, power, and ethics</span><span class="blog-d">AUG 14</span></div></a>
+    <a href="#" class="view-all">Read all research →</a>
+  </div>
+</section>
+
+<section class="sec reveal" id="courses">
+  <div class="sec-head"><span class="sec-num">02</span><span class="sec-title">Courses</span></div>
+  <div class="sec-body">
+
+    <div style="border:1px solid var(--green);padding:32px;margin-bottom:40px">
+      <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--green);letter-spacing:2px;margin-bottom:12px">// BUNDLE</div>
+      <div style="font-size:28px;font-weight:700;letter-spacing:-1px;margin-bottom:8px">All 6 Courses. One Bundle.</div>
+      <div style="font-size:15px;color:var(--dim);margin-bottom:24px">3 months access. Delivered via email within 24 hours of purchase.</div>
+
+      <div style="border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong);padding:18px 0;margin-bottom:20px">
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:var(--dim)"><span>Web Hacking 101 — OWASP Top 10</span><span style="font-family:'Space Mono',monospace;color:var(--fg)">$39</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:var(--dim)"><span>Bug Bounty — Zero to First Report</span><span style="font-family:'Space Mono',monospace;color:var(--fg)">$59</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:var(--dim)"><span>Linux for Hackers — Complete Basics</span><span style="font-family:'Space Mono',monospace;color:var(--green)">FREE</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:var(--dim)"><span>Burp Suite Pro — Practical Hacking</span><span style="font-family:'Space Mono',monospace;color:var(--fg)">$49</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:var(--dim)"><span>Local LLMs for Hackers — Ollama &amp; Beyond</span><span style="font-family:'Space Mono',monospace;color:var(--fg)">$29</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:var(--dim)"><span>SOC L1 Analyst — Roadmap</span><span style="font-family:'Space Mono',monospace;color:var(--fg)">$49</span></div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:var(--dim)">
+        <span>Total value</span><span style="font-family:'Space Mono',monospace;color:var(--fg)">$225</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:var(--dim)">
+        <span>Bundle discount</span><span style="font-family:'Space Mono',monospace;color:var(--red)">− $76</span>
+      </div>
+
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-top:20px;padding-top:20px;border-top:1px solid var(--line-strong)">
+        <span style="font-size:13px;color:var(--dim);letter-spacing:1px;text-transform:uppercase;font-family:'Space Mono',monospace">You pay</span>
+        <span style="font-family:'Space Mono',monospace;font-size:34px;color:var(--green);font-weight:700">$149</span>
+      </div>
+
+      <a href="#" class="enroll-btn" style="font-size:13px;padding:12px 28px;margin-top:22px">Get the Bundle →</a>
+    </div>
+
+    <div class="course-row"><div class="c-num">01</div><div class="c-info"><div class="c-name">Web Hacking 101 — OWASP Top 10</div><div class="c-meta">6 hrs · Hindi + English · Practical labs</div></div><div class="c-tag tag-new">NEW</div><div class="c-price">$39</div></div>
+    <div class="course-row"><div class="c-num">02</div><div class="c-info"><div class="c-name">Bug Bounty — Zero to First Report</div><div class="c-meta">8 sessions · Live on Meet · All levels</div></div><div class="c-tag tag-live">LIVE</div><div class="c-price">$59</div></div>
+    <div class="course-row"><div class="c-num">03</div><div class="c-info"><div class="c-name">Linux for Hackers — Complete Basics</div><div class="c-meta">3 hrs · Hindi · Beginner-friendly</div></div><div class="c-tag tag-free">FREE</div><div class="c-price">$0</div></div>
+    <div class="course-row"><div class="c-num">04</div><div class="c-info"><div class="c-name">Burp Suite Pro — Practical Hacking</div><div class="c-meta">4 hrs · Hindi + English · Intermediate</div></div><div class="c-tag tag-new">NEW</div><div class="c-price">$49</div></div>
+    <div class="course-row"><div class="c-num">05</div><div class="c-info"><div class="c-name">Local LLMs for Hackers — Ollama &amp; Beyond</div><div class="c-meta">4 hrs · Hindi + English · Intermediate</div></div><div class="c-tag tag-ai">AI</div><div class="c-price">$29</div></div>
+    <div class="course-row"><div class="c-num">06</div><div class="c-info"><div class="c-name">SOC L1 Analyst — Job-Ready Roadmap</div><div class="c-meta">8 hrs · Hindi · From fundamentals to interviews</div></div><div class="c-tag tag-new">SOC</div><div class="c-price">$49</div></div>
+  </div>
+</section>
+
+<section class="sec reveal" id="live">
+  <div class="sec-head"><span class="sec-num">03</span><span class="sec-title">Live Classes</span></div>
+  <div class="sec-body">
+    <div class="live-wrap">
+      <div>
+        <div class="live-dot-row"><div class="ldot"></div> NEXT · SUN 21 SEP · 7:00 PM IST</div>
+        <div class="live-title">Burp Suite — Real Bug Hunting Session</div>
+        <div class="live-sub">Intercept, modify, exploit — hands-on with real targets. Hindi + English.</div>
+      </div>
+      <a href="#" class="enroll-btn">Join $19 →</a>
+    </div>
+    <div class="up-row"><span class="up-date">SEP 28</span><span>OWASP Top 10 — Live Breakdown</span><span class="up-price">$19</span></div>
+    <div class="up-row"><span class="up-date">OCT 05</span><span>Linux Privilege Escalation — Hands-on</span><span class="up-price">$25</span></div>
+    <div class="up-row"><span class="up-date">OCT 12</span><span>Recon &amp; Subdomain Enumeration</span><span class="up-price">$19</span></div>
+  </div>
+</section>
+
+<section class="sec reveal" id="projects">
+  <div class="sec-head"><span class="sec-num">04</span><span class="sec-title">Projects &amp; Labs</span></div>
+  <div class="sec-body" style="padding:0">
+    <div class="projects-grid">
+      <div class="proj"><div class="proj-tag">// LINUX · C++</div><div class="proj-title">SaraSec</div><div class="proj-desc">Linux-native security &amp; telemetry platform. Real-time system monitoring, network visibility, and intrusion detection in a single environment.</div><div class="proj-stack"><span>C++</span><span>Linux</span><span>Networking</span><span>Telemetry</span></div></div>
+      <div class="proj"><div class="proj-tag">// AI · RESEARCH</div><div class="proj-title">Multi-Agent Intelligence</div><div class="proj-desc">Distributed intelligence research. Autonomous agents that operate independently while coordinating toward shared goals.</div><div class="proj-stack"><span>Python</span><span>LLMs</span><span>Multi-Agent</span></div></div>
+      <div class="proj"><div class="proj-tag">// WEB SECURITY</div><div class="proj-title">Web Vulnerability Scanner</div><div class="proj-desc">OWASP-aligned automated scanner. Detects common web application flaws during recon and audit workflows.</div><div class="proj-stack"><span>Python</span><span>OWASP</span><span>Recon</span></div></div>
+      <div class="proj"><div class="proj-tag">// AUTOMATION</div><div class="proj-title">AI Support Chatbot</div><div class="proj-desc">Customer support chatbot with FAQ matching and optional LLM fallback. Built for real business deployments.</div><div class="proj-stack"><span>Python</span><span>Flask</span><span>LLM</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec reveal" id="awareness">
+  <div class="sec-head"><span class="sec-num">05</span><span class="sec-title">Cyber Notes</span></div>
+  <div class="sec-body">
+    <p class="aware-intro">Short notes on common attack types and the precautions published by security bodies. Free to read.</p>
+    <div class="aware-row"><div class="aware-n">01</div><div><div class="aware-title">Phishing</div><div class="aware-desc">Fake links, emails, and login pages. How these attacks are structured and the signals that identify them.</div></div></div>
+    <div class="aware-row"><div class="aware-n">02</div><div><div class="aware-title">UPI &amp; Banking Fraud</div><div class="aware-desc">UPI request scams, OTP fraud, and fake customer care numbers. Common patterns seen in India.</div></div></div>
+    <div class="aware-row"><div class="aware-n">03</div><div><div class="aware-title">Password Practices</div><div class="aware-desc">Common password weaknesses and free tools used for managing credentials.</div></div></div>
+    <div class="aware-row"><div class="aware-n">04</div><div><div class="aware-title">Public WiFi</div><div class="aware-desc">What is exposed on shared networks and the standard mitigations recommended for everyday use.</div></div></div>
+    <div class="aware-row"><div class="aware-n">05</div><div><div class="aware-title">Mobile Security</div><div class="aware-desc">App permissions, spyware indicators, and SIM swap. How to review what is installed on your device.</div></div></div>
+    <div class="aware-row"><div class="aware-n">06</div><div><div class="aware-title">Social Engineering</div><div class="aware-desc">Attacks that target people rather than systems. The most common vector — explained briefly.</div></div></div>
+    <a href="#" class="view-all" style="margin-top:28px;display:inline-block">Read all notes →</a>
+  </div>
+</section>
+
+<section class="sec reveal" id="about">
+  <div class="sec-head"><span class="sec-num">06</span><span class="sec-title">The Creator</span></div>
+  <div class="sec-body">
+    <div class="about-grid">
+      <div>
+        <div class="about-name"><span>Abhijeet (RON)</span>Security Researcher &amp; Systems Builder.</div>
+        <p class="about-p">I work at the intersection of <strong>offensive security, systems engineering, and applied AI</strong>. My work involves auditing web applications, building Linux-native security tooling, and researching how autonomous agents can coordinate on real problems.</p>
+        <p class="about-p">The courses on this site cover the same material I work with: OWASP fundamentals, bug bounty workflows, Linux tooling, and local LLM setup. Delivered in Hindi and English.</p>
+        <p class="about-p">Currently focused on: bug bounty research on HackerOne, SaraSec development, and multi-agent AI systems.</p>
+        <div class="about-tags"><span>WEB SECURITY</span><span>BUG BOUNTY</span><span>LINUX SYSTEMS</span><span>AI / LLMs</span></div>
+      </div>
+      <div>
+        <div class="connect-row"><span class="connect-platform">GITHUB</span><a href="https://github.com/AbhijeetRON" target="_blank" class="connect-handle">AbhijeetRON →</a></div>
+        <div class="connect-row"><span class="connect-platform">LINKEDIN</span><a href="https://linkedin.com/in/abhijeetron" target="_blank" class="connect-handle">abhijeetron →</a></div>
+        <div class="connect-row"><span class="connect-platform">HACKERONE</span><span class="connect-handle">ban360</span></div>
+        <div class="connect-row"><span class="connect-platform">YOUTUBE</span><a href="https://youtube.com/@JewRON" target="_blank" class="connect-handle">@JewRON →</a></div>
+        <div class="connect-row"><span class="connect-platform">FIVERR</span><a href="https://fiverr.com/abhijeetbanwari" target="_blank" class="connect-handle">abhijeetbanwari →</a></div>
+        <div class="connect-row"><span class="connect-platform">MAIL</span><a href="mailto:abhijeet.rom@gmail.com" class="connect-handle">abhijeet.rom@gmail.com →</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-left">© 2026 THE RON · Security Research &amp; Digital Philosophy · Bhopal, IN</div>
+  <div class="footer-right">
+    <a href="https://github.com/AbhijeetRON" target="_blank">GitHub</a>
+    <a href="https://linkedin.com/in/abhijeetron" target="_blank">LinkedIn</a>
+    <a href="https://youtube.com/@JewRON" target="_blank">YouTube</a>
+    <a href="https://fiverr.com/abhijeetbanwari" target="_blank">Fiverr</a>
+    <a href="mailto:abhijeet.rom@gmail.com">Mail</a>
+  </div>
+</footer>
+
+<script>
+function openDrawer(){document.getElementById('drawer').classList.add('on');document.getElementById('overlay').classList.add('on');}
+function closeDrawer(){document.getElementById('drawer').classList.remove('on');document.getElementById('overlay').classList.remove('on');}
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+},{threshold:0.08});
+reveals.forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
