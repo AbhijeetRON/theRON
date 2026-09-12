@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE RON — Security Research & Cyber Education</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #090909;
+    --white: #f5f4f0;
+    --gray: #888;
+    --border: #1e1e1e;
+    --accent: #00e5a0;
+    --danger: #ff3b3b;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--black);
+    color: var(--white);
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    background: var(--accent);
+    color: var(--black);
+    text-align: center;
+    padding: 8px 24px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .topbar a { color: var(--black); text-decoration: underline; }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(9,9,9,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+
+  .logo {
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+  .logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1px;
+  }
+  .nav-links a {
+    color: var(--gray);
+    transition: color 0.15s;
+  }
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: var(--black);
+    font-size: 11px;
+    font-weight: 700;
+    font-family: var(--mono);
+    padding: 8px 16px;
+    letter-spacing: 1px;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 100px 32px 80px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.4rem, 6vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.02;
+    letter-spacing: -2px;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--gray);
+    max-width: 540px;
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--black);
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 13px 28px;
+    letter-spacing: 1px;
+    transition: opacity 0.15s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--white);
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 12px 28px;
+    border: 1px solid var(--border);
+    letter-spacing: 1px;
+    transition: border-color 0.15s;
+  }
+  .btn-outline:hover { border-color: #555; }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 24px 32px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+
+  .stat {
+    flex: 1;
+    min-width: 140px;
+    padding: 0 32px;
+    border-right: 1px solid var(--border);
+  }
+  .stat:first-child { padding-left: 0; }
+  .stat:last-child { border-right: none; }
+
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--gray);
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+
+  /* ── SECTION WRAPPER ── */
+  .section {
+    padding: 80px 32px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 40px;
+    letter-spacing: -0.5px;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── COURSES ── */
+  .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .course-card {
+    background: var(--black);
+    padding: 28px 24px;
+    transition: background 0.15s;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .course-card:hover { background: #111; }
+
+  .course-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    padding: 4px 8px;
+    display: inline-block;
+    width: fit-content;
+  }
+  .badge-new { background: var(--accent); color: var(--black); }
+  .badge-live { background: var(--danger); color: #fff; }
+  .badge-free { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+
+  .course-title {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.3;
+    flex: 1;
+  }
+
+  .course-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gray);
+  }
+
+  .course-price {
+    font-family: var(--mono);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .course-price .original {
+    font-size: 13px;
+    color: var(--gray);
+    text-decoration: line-through;
+    margin-left: 6px;
+  }
+
+  .course-enroll {
+    display: inline-block;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--white);
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 9px 18px;
+    letter-spacing: 1px;
+    transition: all 0.15s;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+  }
+  .course-enroll:hover {
+    background: var(--accent);
+    color: var(--black);
+    border-color: var(--accent);
+  }
+
+  /* ── LIVE CLASS ── */
+  .live-banner {
+    background: #0a0a0a;
+    border: 1px solid var(--border);
+    padding: 36px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .live-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--danger);
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--danger);
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .live-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .live-desc {
+    font-size: 14px;
+    color: var(--gray);
+  }
+
+  .live-join {
+    background: var(--danger);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 14px 32px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    transition: opacity 0.15s;
+    cursor: pointer;
+    border: none;
+  }
+  .live-join:hover { opacity: 0.85; }
+
+  /* ── BLOG ── */
+  .blog-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .blog-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.1s;
+  }
+  .blog-row:first-child { border-top: 1px solid var(--border); }
+  .blog-row:hover .blog-title { color: var(--accent); }
+
+  .blog-left { display: flex; align-items: baseline; gap: 16px; flex: 1; }
+
+  .blog-cat {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 1.5px;
+    white-space: nowrap;
+    min-width: 80px;
+  }
+
+  .blog-title {
+    font-size: 15px;
+    font-weight: 500;
+    transition: color 0.15s;
+    line-height: 1.4;
+  }
+
+  .blog-date {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gray);
+    white-space: nowrap;
+  }
+
+  /* ── CYBER AWARENESS ── */
+  .awareness-section {
+    background: #050505;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 80px 32px;
+  }
+
+  .awareness-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .awareness-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 40px;
+  }
+
+  .awareness-card {
+    background: #050505;
+    padding: 28px 24px;
+  }
+
+  .awareness-icon {
+    font-family: var(--mono);
+    font-size: 22px;
+    margin-bottom: 14px;
+    display: block;
+    color: var(--accent);
+  }
+
+  .awareness-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .awareness-desc {
+    font-size: 13px;
+    color: var(--gray);
+    line-height: 1.6;
+  }
+
+  /* ── FOCUS AREAS ── */
+  .focus-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .focus-card {
+    background: var(--black);
+    padding: 32px 28px;
+  }
+
+  .focus-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gray);
+    margin-bottom: 16px;
+  }
+
+  .focus-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .focus-desc {
+    font-size: 13px;
+    color: var(--gray);
+    line-height: 1.65;
+  }
+
+  /* ── ABOUT ── */
+  .about-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .about-left h2 {
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+
+  .about-left p {
+    font-size: 14px;
+    color: var(--gray);
+    line-height: 1.75;
+    margin-bottom: 16px;
+  }
+
+  .about-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .about-link-row {
+    background: var(--black);
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 12px;
+    transition: background 0.1s;
+    cursor: pointer;
+  }
+  .about-link-row:hover { background: #111; }
+  .about-link-row span:last-child { color: var(--accent); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gray);
+    letter-spacing: 1px;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+  }
+  .footer-links a:hover { color: var(--white); }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    nav { padding: 0 16px; }
+    .nav-links { display: none; }
+    .hero { padding: 64px 20px 56px; }
+    .hero h1 { letter-spacing: -1px; }
+    .section { padding: 56px 20px; }
+    .stats-bar { padding: 20px; gap: 0; }
+    .stat { min-width: 110px; padding: 0 16px; }
+    .live-banner { padding: 28px 24px; }
+    .focus-grid { grid-template-columns: 1fr; }
+    .about-wrap { grid-template-columns: 1fr; gap: 40px; }
+    footer { padding: 24px 20px; flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  New batch open: Web Hacking 101 — ₹499 only &nbsp;·&nbsp; <a href="#courses">See all courses →</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">THE<span> RON</span></div>
+  <ul class="nav-links">
+    <li><a href="#courses">Courses</a></li>
+    <li><a href="#live">Live</a></li>
+    <li><a href="#blog">Blog</a></li>
+    <li><a href="#awareness">Cyber Safety</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+  <a href="#courses" class="nav-cta">Enroll Now</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">// Security Research · Cyber Education · AI Labs</div>
+  <h1>Breaking systems<br>to build <em>better</em><br>security.</h1>
+  <p class="hero-sub">
+    Courses, live classes, and honest cyber content — web audits, Linux telemetry, bug bounty, and AI labs. At prices that don't gatekeep knowledge.
+  </p>
+  <div class="hero-btns">
+    <a href="#courses" class="btn-primary">Browse Courses →</a>
+    <a href="#live" class="btn-outline">Join Free Live Class</a>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat">
+    <span class="stat-num">12+</span>
+    <div class="stat-label">Courses & Labs</div>
+  </div>
+  <div class="stat">
+    <span class="stat-num">₹99</span>
+    <div class="stat-label">Live class price</div>
+  </div>
+  <div class="stat">
+    <span class="stat-num">Free</span>
+    <div class="stat-label">Blog & guides</div>
+  </div>
+  <div class="stat">
+    <span class="stat-num">Hindi + English</span>
+    <div class="stat-label">Language support</div>
+  </div>
+</div>
+
+<!-- COURSES -->
+<section class="section" id="courses">
+  <div class="section-label">// Courses</div>
+  <div class="section-title">Learn real security — cheap price, real knowledge.</div>
+  <div class="courses-grid">
+
+    <div class="course-card">
+      <span class="course-badge badge-new">Web Security</span>
+      <div class="course-title">Web Hacking 101 — OWASP Top 10</div>
+      <div class="course-meta">6 hours · Hindi + English · Beginner</div>
+      <div class="course-price">₹499 <span class="original">₹2,999</span></div>
+      <button class="course-enroll">Enroll Now →</button>
+    </div>
+
+    <div class="course-card">
+      <span class="course-badge badge-live">Live Batch</span>
+      <div class="course-title">Bug Bounty — Zero to First Report</div>
+      <div class="course-meta">8 sessions · Live on Meet · All levels</div>
+      <div class="course-price">₹999 <span class="original">₹4,999</span></div>
+      <button class="course-enroll">Join Batch →</button>
+    </div>
+
+    <div class="course-card">
+      <span class="course-badge badge-free">Free</span>
+      <div class="course-title">Linux for Hackers — Complete Basics</div>
+      <div class="course-meta">3 hours · Hindi · Beginner</div>
+      <div class="course-price">₹0</div>
+      <button class="course-enroll">Start Free →</button>
+    </div>
+
+    <div class="course-card">
+      <span class="course-badge badge-new">Burp Suite</span>
+      <div class="course-title">Burp Suite Pro — Practical Hacking</div>
+      <div class="course-meta">4 hours · Hindi + English · Intermediate</div>
+      <div class="course-price">₹699 <span class="original">₹3,499</span></div>
+      <button class="course-enroll">Enroll Now →</button>
+    </div>
+
+    <div class="course-card">
+      <span class="course-badge badge-new">AI + Security</span>
+      <div class="course-title">Local LLMs for Hackers — Ollama & More</div>
+      <div class="course-meta">4 hours · Hindi + English · Intermediate</div>
+      <div class="course-price">₹599 <span class="original">₹2,499</span></div>
+      <button class="course-enroll">Enroll Now →</button>
+    </div>
+
+    <div class="course-card">
+      <span class="course-badge badge-new">SOC / Blue Team</span>
+      <div class="course-title">SOC L1 Analyst — Job Ready Roadmap</div>
+      <div class="course-meta">8 hours · Hindi · Beginner to Job</div>
+      <div class="course-price">₹899 <span class="original">₹4,999</span></div>
+      <button class="course-enroll">Enroll Now →</button>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- LIVE CLASS -->
+<section class="section" id="live">
+  <div class="section-label">// Live Classes</div>
+  <div class="section-title">Hands-on, real-time. Join from anywhere.</div>
+  <div class="live-banner">
+    <div>
+      <div class="live-indicator">
+        <div class="live-dot"></div>
+        LIVE · Sun 21 Sep · 7:00 PM IST
+      </div>
+      <div class="live-title">Burp Suite — Real Bug Hunting Session</div>
+      <div class="live-desc">Intercept, modify, exploit — hands-on with real targets. Hindi + English. Seats limited.</div>
+    </div>
+    <button class="live-join">Join for ₹99 →</button>
+  </div>
+
+  <div style="margin-top: 1px; background: var(--border);">
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1px; background: var(--border);">
+      <div style="background: #080808; padding: 22px 24px;">
+        <div style="font-family: var(--mono); font-size: 11px; color: var(--gray); margin-bottom: 8px;">UPCOMING — Sep 28</div>
+        <div style="font-size: 15px; font-weight: 600; margin-bottom: 4px;">OWASP Top 10 — Live Breakdown</div>
+        <div style="font-size: 12px; color: var(--gray);">₹99 · 2 hours</div>
+      </div>
+      <div style="background: #080808; padding: 22px 24px;">
+        <div style="font-family: var(--mono); font-size: 11px; color: var(--gray); margin-bottom: 8px;">UPCOMING — Oct 5</div>
+        <div style="font-size: 15px; font-weight: 600; margin-bottom: 4px;">Linux Privilege Escalation — Hands-on</div>
+        <div style="font-size: 12px; color: var(--gray);">₹149 · 3 hours</div>
+      </div>
+      <div style="background: #080808; padding: 22px 24px;">
+        <div style="font-family: var(--mono); font-size: 11px; color: var(--gray); margin-bottom: 8px;">UPCOMING — Oct 12</div>
+        <div style="font-size: 15px; font-weight: 600; margin-bottom: 4px;">Recon & Subdomain Enumeration</div>
+        <div style="font-size: 12px; color: var(--gray);">Free for students · 1.5 hours</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- BLOG -->
+<section class="section" id="blog">
+  <div class="section-label">// Blog & Research</div>
+  <div class="section-title">Unfiltered notes from the terminal.</div>
+  <div class="blog-list">
+    <div class="blog-row">
+      <div class="blog-left">
+        <span class="blog-cat">BUG BOUNTY</span>
+        <span class="blog-title">How I found my first bug on HackerOne — full walkthrough</span>
+      </div>
+      <span class="blog-date">Sep 10, 2026</span>
+    </div>
+    <div class="blog-row">
+      <div class="blog-left">
+        <span class="blog-cat">OWASP</span>
+        <span class="blog-title">OWASP Top 10 explained in Hindi — simple aur seedha</span>
+      </div>
+      <span class="blog-date">Sep 5, 2026</span>
+    </div>
+    <div class="blog-row">
+      <div class="blog-left">
+        <span class="blog-cat">AI + LINUX</span>
+        <span class="blog-title">Running Ollama on cheap hardware — complete guide</span>
+      </div>
+      <span class="blog-date">Aug 28, 2026</span>
+    </div>
+    <div class="blog-row">
+      <div class="blog-left">
+        <span class="blog-cat">WEB SECURITY</span>
+        <span class="blog-title">Web Cache Deception — what it is and how to find it</span>
+      </div>
+      <span class="blog-date">Aug 20, 2026</span>
+    </div>
+    <div class="blog-row">
+      <div class="blog-left">
+        <span class="blog-cat">PHILOSOPHY</span>
+        <span class="blog-title">The psychology of a hacker — curiosity, power, and ethics</span>
+      </div>
+      <span class="blog-date">Aug 14, 2026</span>
+    </div>
+    <div class="blog-row">
+      <div class="blog-left">
+        <span class="blog-cat">SOC</span>
+        <span class="blog-title">SOC L1 roadmap — fresher se analyst tak ka safar</span>
+      </div>
+      <span class="blog-date">Aug 8, 2026</span>
+    </div>
+  </div>
+  <div style="margin-top: 32px;">
+    <a href="#" class="btn-outline">View all posts →</a>
+  </div>
+</section>
+
+<!-- CYBER AWARENESS -->
+<section class="awareness-section" id="awareness">
+  <div class="awareness-inner">
+    <div class="section-label">// Cyber Awareness — CyberBachao</div>
+    <div class="section-title">Sabhi ko cyber attacks se bachana — honest info, free mein.</div>
+    <p style="color: var(--gray); font-size: 14px; max-width: 560px; line-height: 1.7;">
+      Our mission: every person should know how to protect themselves online. No paid walls, no fake promises. Real precautions, real knowledge.
+    </p>
+    <div class="awareness-grid">
+      <div class="awareness-card">
+        <span class="awareness-icon">[01]</span>
+        <div class="awareness-title">Phishing Attacks</div>
+        <div class="awareness-desc">Fake links, fake emails, fake websites — how attackers trap you and how to spot them instantly.</div>
+      </div>
+      <div class="awareness-card">
+        <span class="awareness-icon">[02]</span>
+        <div class="awareness-title">Password Safety</div>
+        <div class="awareness-desc">Why "password123" will get you hacked. How to create and manage strong passwords for free.</div>
+      </div>
+      <div class="awareness-card">
+        <span class="awareness-icon">[03]</span>
+        <div class="awareness-title">Public WiFi Risks</div>
+        <div class="awareness-desc">What hackers can do on public networks. Simple steps to protect yourself every time you connect.</div>
+      </div>
+      <div class="awareness-card">
+        <span class="awareness-icon">[04]</span>
+        <div class="awareness-title">Social Engineering</div>
+        <div class="awareness-desc">How attackers manipulate people — not machines. The most dangerous attack vector explained simply.</div>
+      </div>
+      <div class="awareness-card">
+        <span class="awareness-icon">[05]</span>
+        <div class="awareness-title">Mobile Security</div>
+        <div class="awareness-desc">App permissions, spy apps, SIM swap attacks — how to keep your phone safe from real threats.</div>
+      </div>
+      <div class="awareness-card">
+        <span class="awareness-icon">[06]</span>
+        <div class="awareness-title">UPI & Banking Scams</div>
+        <div class="awareness-desc">India-specific scams targeting UPI, OTP fraud, and fake customer care — real cases, real solutions.</div>
+      </div>
+    </div>
+    <div style="margin-top: 32px;">
+      <a href="#" class="btn-primary">Read All Safety Guides →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOCUS AREAS -->
+<section class="section">
+  <div class="section-label">// Focus Areas</div>
+  <div class="section-title">What this lab works on.</div>
+  <div class="focus-grid">
+    <div class="focus-card">
+      <div class="focus-num">01 / Web Security</div>
+      <div class="focus-title">Bug Bounty & Web Hacking</div>
+      <div class="focus-desc">OWASP Top 10, recon pipelines, and real-world vulnerability research on HackerOne (handle: ban360).</div>
+    </div>
+    <div class="focus-card">
+      <div class="focus-num">02 / Systems</div>
+      <div class="focus-title">Linux & SaraSec Platform</div>
+      <div class="focus-desc">Building SaraSec — a Linux-native security platform for real-time telemetry, monitoring, and threat detection.</div>
+    </div>
+    <div class="focus-card">
+      <div class="focus-num">03 / AI Research</div>
+      <div class="focus-title">Multi-Agent AI Systems</div>
+      <div class="focus-desc">Researching distributed intelligence and autonomous agent architectures — octopus-inspired multi-agent coordination.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="about-wrap">
+    <div class="about-left">
+      <div class="section-label">// The Creator</div>
+      <h2>Abhijeet<br>Banwari.<br>Ron.</h2>
+      <p>
+        Security researcher, systems builder, and cyber educator. BCA graduate from Makhanlal Chaturvedi University, Bhopal.
+      </p>
+      <p>
+        I spend time auditing web applications, engineering Linux security systems, and building courses that make cybersecurity accessible to everyone — not just people who can afford expensive bootcamps.
+      </p>
+      <p>
+        Core work: HackerOne (ban360) · SaraSec platform · Multi-agent AI · Content in Hindi + English.
+      </p>
+      <div style="margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap;">
+        <a href="https://github.com/AbhijeetRON" class="btn-outline" target="_blank">GitHub →</a>
+        <a href="https://linkedin.com/in/abhijeetron" class="btn-outline" target="_blank">LinkedIn →</a>
+      </div>
+    </div>
+    <div class="about-links">
+      <div class="about-link-row">
+        <span>GitHub</span>
+        <span>github.com/AbhijeetRON →</span>
+      </div>
+      <div class="about-link-row">
+        <span>LinkedIn</span>
+        <span>abhijeetron →</span>
+      </div>
+      <div class="about-link-row">
+        <span>HackerOne</span>
+        <span>ban360 →</span>
+      </div>
+      <div class="about-link-row">
+        <span>YouTube</span>
+        <span>@JewRON →</span>
+      </div>
+      <div class="about-link-row">
+        <span>Fiverr</span>
+        <span>abhijeetbanwari →</span>
+      </div>
+      <div class="about-link-row">
+        <span>Email</span>
+        <span>abhijeet.rom@gmail.com →</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div style="font-family: var(--mono);">
+    © 2026 THE RON · Security Research & Digital Philosophy
+  </div>
+  <div class="footer-links">
+    <a href="https://github.com/AbhijeetRON">GitHub</a>
+    <a href="https://linkedin.com/in/abhijeetron">LinkedIn</a>
+    <a href="#">HackerOne</a>
+    <a href="#">YouTube</a>
+    <a href="mailto:abhijeet.rom@gmail.com">Mail</a>
+  </div>
+</footer>
+
+</body>
+</html>
